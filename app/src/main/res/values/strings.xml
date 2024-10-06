@@ -1,0 +1,8 @@
+<resources>
+  <string name="app_name">ABCall</string>
+
+
+  <string name="no_internet_mode">Estás en modo ermitaño digital. Sin internet.</string>
+  <string name="close">cerrar</string>
+
+</resources>
