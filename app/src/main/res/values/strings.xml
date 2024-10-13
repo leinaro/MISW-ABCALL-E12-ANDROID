@@ -1,8 +1,19 @@
 <resources>
-  <string name="app_name">ABCall</string>
+  <string name="app_name" translatable="false">ABCall</string>
+
+  <!-- No Internet Banner -->
+  <string name="no_internet_mode">You are in digital hermit mode. No internet.</string>
+  <string name="close">close</string>
+
+  <!-- Search Incident -->
+  <string name="search_incident_query">Incident number or user document</string>
+  <string name="search_incident">Search</string>
+
+  <string name="en">English</string>
+  <string name="es">Spanish</string>
 
 
-  <string name="no_internet_mode">Estás en modo ermitaño digital. Sin internet.</string>
-  <string name="close">cerrar</string>
+
+
 
 </resources>

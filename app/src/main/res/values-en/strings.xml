@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- No Internet Banner -->
+  <string name="no_internet_mode">You are in digital hermit mode. No internet.</string>
+  <string name="close">close</string>
+
+  <!-- Search Incident -->
+  <string name="search_incident_query">Incident number or user document</string>
+  <string name="search_incident">Search</string>
+
+  <string name="en">English</string>
+  <string name="es">Spanish</string>
+
+</resources>

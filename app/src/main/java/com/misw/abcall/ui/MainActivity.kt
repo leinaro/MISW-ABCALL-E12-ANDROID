@@ -32,6 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.misw.abcall.R
+import com.misw.abcall.ui.state.ABCallEvent
+import com.misw.abcall.ui.state.MainViewState
 import com.misw.abcall.ui.theme.ABCallTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,7 +61,14 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    MainScreen(
+                        state = state,
+                        event = event,
+                        isInternetAvailable = isInternetAvailable,
+                        launchIntent = { userIntent ->
+                            viewModel.onUserIntent(userIntent)
+                        }
+                    )
                 }
             }
         }
@@ -69,28 +78,34 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
+    state: MainViewState = MainViewState(),
+    event: ABCallEvent = ABCallEvent.Idle,
     isInternetAvailable: Boolean = true,
+    launchIntent: (UserIntent) -> Unit = {},
 ) {
+
     var offlineBannerVisible by rememberSaveable {
         mutableStateOf(false)
     }
-    Column(modifier = Modifier.fillMaxSize()){
-        if (isInternetAvailable.not() && offlineBannerVisible){
-            OffLineBanner{
+    Column(modifier = Modifier.fillMaxSize()) {
+        if (isInternetAvailable.not() && offlineBannerVisible) {
+            OffLineBanner {
                 offlineBannerVisible = false
             }
         }
         var showSplash by remember { mutableStateOf(true) }
-        if (showSplash){
-           /* SplashScreen(
-                navigateToHome = {
+        if (showSplash) {
+            SplashScreen(
+                continueNavigation = {
                     showSplash = false
                 }
-            )*/
+            )
         } else {
             MainScreenContent(
-                /*state = state,
+                state = state,
                 event = event,
+                launchIntent = launchIntent,
+                /*
                 isRefreshing = isRefreshing,
                 onRefresh = {
                     viewModel.getAllInformation()
@@ -123,7 +138,7 @@ class SnackbarVisualsWithError(
 @Composable
 fun OffLineBanner(
     closeClick: () -> Unit,
-){
+) {
     Box(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
@@ -132,7 +147,7 @@ fun OffLineBanner(
     ) {
         Text(
             modifier = Modifier.padding(4.dp),
-            text= stringResource(id = R.string.no_internet_mode),
+            text = stringResource(id = R.string.no_internet_mode),
             color = MaterialTheme.colorScheme.surfaceTint,
         )
         Icon(

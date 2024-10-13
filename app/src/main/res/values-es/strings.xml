@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- No Internet Banner -->
+  <string name="no_internet_mode">Estás en modo ermitaño digital. Sin internet.</string>
+  <string name="close">cerrar</string>
+
+  <!-- Search Incident -->
+  <string name="search_incident_query">Número de incidente o documento de usuario</string>
+  <string name="search_incident">Buscar</string>
+
+  <string name="en">Inglés</string>
+  <string name="es">Español</string>
+</resources>

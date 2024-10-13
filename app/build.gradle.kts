@@ -20,6 +20,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+     //   resConfigs("en", "es")
+
     }
 
     buildTypes {
@@ -48,6 +50,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    androidResources {
+        generateLocaleConfig = true
+    }
 }
 
 dependencies {
@@ -65,7 +71,6 @@ dependencies {
     // Compose Navigation
     implementation(libs.androidx.navigation.compose)
 
-
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
@@ -79,7 +84,12 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
 
+    // Images
+    implementation(libs.lottie.compose)
+    implementation(libs.coil.compose)
 
+    //
+    implementation ("androidx.appcompat:appcompat:1.7.0-alpha01")
 
     testImplementation(libs.junit)
 
