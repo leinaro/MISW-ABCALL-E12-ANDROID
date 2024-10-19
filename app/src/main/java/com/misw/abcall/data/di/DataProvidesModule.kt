@@ -13,7 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://ec2-3-12-155-51.us-east-2.compute.amazonaws.com:3000/"
+private const val BASE_URL = "http://10.0.2.2:5008/"
 
 @Module
 @InstallIn(SingletonComponent::class)

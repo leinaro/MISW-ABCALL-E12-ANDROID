@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.misw.abcall.R
+import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.state.ABCallEvent
 import com.misw.abcall.ui.state.MainViewState
 import com.misw.abcall.ui.theme.ABCallTheme
@@ -67,7 +68,8 @@ class MainActivity : ComponentActivity() {
                         isInternetAvailable = isInternetAvailable,
                         launchIntent = { userIntent ->
                             viewModel.onUserIntent(userIntent)
-                        }
+                        },
+                        getIncident = { viewModel.getIncident() },
                     )
                 }
             }
@@ -82,6 +84,7 @@ fun MainScreen(
     event: ABCallEvent = ABCallEvent.Idle,
     isInternetAvailable: Boolean = true,
     launchIntent: (UserIntent) -> Unit = {},
+    getIncident: () -> IncidentDTO?,
 ) {
 
     var offlineBannerVisible by rememberSaveable {
@@ -105,6 +108,7 @@ fun MainScreen(
                 state = state,
                 event = event,
                 launchIntent = launchIntent,
+                getIncident = getIncident,
                 /*
                 isRefreshing = isRefreshing,
                 onRefresh = {
@@ -119,7 +123,7 @@ fun MainScreen(
 @Composable
 fun GreetingPreview() {
     ABCallTheme {
-        MainScreen()
+        MainScreen(getIncident = { IncidentDTO() })
     }
 }
 

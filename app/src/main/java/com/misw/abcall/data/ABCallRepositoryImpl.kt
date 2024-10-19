@@ -44,11 +44,8 @@ class ABCallRepositoryImpl @Inject constructor(
         return flow {
             try {
                 _isRefreshing.value = true
-              //  emit(localDataSource.getAlbums())
                 val incident = remoteDataSource.searchIncident(query)
                 emit(incident)
-               // val albumsEntityList = albums.map { it.toEntity() }
-               // localDataSource.insertAlbums(albumsEntityList)
                 _isRefreshing.value = false
             } catch (e: Exception) {
                 _isRefreshing.value = false
@@ -61,11 +58,8 @@ class ABCallRepositoryImpl @Inject constructor(
         return flow {
             try {
                 _isRefreshing.value = true
-                //  emit(localDataSource.getAlbums())
                 val incident = remoteDataSource.getUserIncidents(query)
                 emit(incident)
-                // val albumsEntityList = albums.map { it.toEntity() }
-                // localDataSource.insertAlbums(albumsEntityList)
                 _isRefreshing.value = false
             } catch (e: Exception) {
                 _isRefreshing.value = false
@@ -79,11 +73,8 @@ class ABCallRepositoryImpl @Inject constructor(
         return flow {
             try {
                 _isRefreshing.value = true
-               // emit(localDataSource.getAlbums())
                 val albums = remoteDataSource.getUser(query)
                 emit(albums)
-               // val albumsEntityList = albums.map { it.toEntity() }
-              //  localDataSource.insertAlbums(albumsEntityList)
                 _isRefreshing.value = false
             } catch (e: Exception) {
                 _isRefreshing.value = false

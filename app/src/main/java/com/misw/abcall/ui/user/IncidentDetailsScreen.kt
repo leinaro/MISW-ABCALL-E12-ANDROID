@@ -12,10 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.theme.ABCallTheme
 
 @Composable
-fun IncidentDetailsScreen(incidentId: Int?) {
+fun IncidentDetailsScreen(incidentId: Int? = null, incident: IncidentDTO?) {
     Column(
         modifier = Modifier.fillMaxWidth()
             .padding(16.dp),
@@ -26,12 +27,14 @@ fun IncidentDetailsScreen(incidentId: Int?) {
             style = MaterialTheme.typography.titleLarge,
         )
 
-        DataBox("Id", "1234QQWERT")
-        DataBox("Titulo", "Problemas de internet")
-        DataBox("descripcion", "No tengo internet en casa")
-        DataBox("Tipo", "Servicio internet")
-        DataBox("Estado", "Abierto")
-        
+        DataBox("Id", incident?.id.orEmpty())
+        DataBox("Titulo", incident?.description.orEmpty())
+        DataBox("descripcion", incident?.description.orEmpty())
+        DataBox("Tipo", incident?.registration_medium.orEmpty())
+        DataBox("Estado", incident?.status.orEmpty())
+        DataBox("Creación", incident?.date.orEmpty())
+        DataBox("Ultima Actualización", incident?.date.orEmpty())
+
     }
 }
 
@@ -57,6 +60,6 @@ private fun DataBox(title: String, description: String){
 @Preview(showBackground = true, showSystemUi = true)
 fun IncidentDetailsScreenPreview() {
     ABCallTheme {
-        IncidentDetailsScreen(incidentId = 1)
+        IncidentDetailsScreen(incidentId = 1, incident = null)
     }
 }
