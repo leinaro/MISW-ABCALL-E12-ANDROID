@@ -5,6 +5,7 @@ plugins {
     id("kotlin-kapt")
 }
 
+
 android {
     namespace = "com.misw.abcall"
     compileSdk = 34
@@ -54,6 +55,10 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 dependencies {
@@ -68,6 +73,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
     // Compose Navigation
     implementation(libs.androidx.navigation.compose)
 

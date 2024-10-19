@@ -13,12 +13,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -65,6 +67,7 @@ class MainActivity : ComponentActivity() {
                     MainScreen(
                         state = state,
                         event = event,
+                        isRefreshing = isRefreshing,
                         isInternetAvailable = isInternetAvailable,
                         launchIntent = { userIntent ->
                             viewModel.onUserIntent(userIntent)
@@ -77,16 +80,17 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     state: MainViewState = MainViewState(),
     event: ABCallEvent = ABCallEvent.Idle,
+    isRefreshing: Boolean = false,
     isInternetAvailable: Boolean = true,
     launchIntent: (UserIntent) -> Unit = {},
     getIncident: () -> IncidentDTO?,
 ) {
-
     var offlineBannerVisible by rememberSaveable {
         mutableStateOf(false)
     }
@@ -109,11 +113,6 @@ fun MainScreen(
                 event = event,
                 launchIntent = launchIntent,
                 getIncident = getIncident,
-                /*
-                isRefreshing = isRefreshing,
-                onRefresh = {
-                    viewModel.getAllInformation()
-                },*/
             )
         }
     }
