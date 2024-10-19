@@ -3,6 +3,7 @@ package com.misw.abcall.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.misw.abcall.domain.ABCallRepository
+import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.Routes.IncidentDetails
 import com.misw.abcall.ui.state.ABCallEvent
 import com.misw.abcall.ui.state.ABCallEvent.NavigateTo
@@ -31,6 +32,8 @@ class ABCallViewModel @Inject constructor(
     val isRefreshing: StateFlow<Boolean> = repository.isRefreshing
     var isInternetAvailable: StateFlow<Boolean> = repository.isInternetAvailable
 
+    var incidentDTO: IncidentDTO? = null
+
     private fun searchIncidentOrUser(query: String) {
         val mutex = Mutex()
         viewModelScope.launch {
@@ -47,6 +50,7 @@ class ABCallViewModel @Inject constructor(
                                 incident = incident,
                             )
                         )*/
+                        incidentDTO = incident
                         setEvent(
                             NavigateTo(IncidentDetails.path.replace("{incidentId}",incident.id.orEmpty() ))
                         )
@@ -78,6 +82,8 @@ class ABCallViewModel @Inject constructor(
             }
 
     }
+
+    fun getIncident() = incidentDTO
 }
 
 sealed class UserIntent{

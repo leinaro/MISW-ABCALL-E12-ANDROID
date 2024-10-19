@@ -46,9 +46,9 @@ fun SplashScreen(
 
     Column(
         modifier = Modifier
-           // .background(Color.Blue)
+            .background(Color.White)
+            .fillMaxSize()
             .testTag("SplashScreen"),
-      //  contentAlignment = Alignment.Center
     ) {
         val composition by rememberLottieComposition(RawRes(R.raw.panda))
         LottieAnimation(

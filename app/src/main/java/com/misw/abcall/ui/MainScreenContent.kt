@@ -40,6 +40,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.misw.abcall.R
+import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.common.ABCallTopAppBar
 import com.misw.abcall.ui.common.InfoDialog
 import com.misw.abcall.ui.common.LocaleDropdownMenu
@@ -64,6 +65,7 @@ import kotlinx.coroutines.launch
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     launchIntent: (UserIntent) -> Unit = {},
+    getIncident: () -> IncidentDTO?,
 ) {
     val context = LocalContext.current
 
@@ -184,14 +186,12 @@ import kotlinx.coroutines.launch
                 navController = navController,
                 startDestination = Routes.SearchIncident.path,
                 modifier = Modifier
-                    //.align(Alignment.Center)
                     .fillMaxSize()
                 //.pullRefresh(pullRefreshState)
             ) {
                 composable(Routes.SearchIncident.path) {
                     SearchIncidentScreenContent(
                         launchIntent = launchIntent,
-                      //  navigateTo = ::navigateTo,
                     )
                 }
                 composable(
@@ -200,7 +200,7 @@ import kotlinx.coroutines.launch
                         navArgument("incidentId") { type = NavType.StringType }
                     )) { backStackEntry ->
                     val incidentId = backStackEntry.arguments?.getInt("incidentId")
-                    IncidentDetailsScreen(incidentId = incidentId)
+                    IncidentDetailsScreen(incident = getIncident())
                 }
                 composable(
                     route = Routes.UserIncidentList.path,
@@ -251,6 +251,7 @@ fun MainScreenPreview() {
     ABCallTheme(dynamicColor = false, darkTheme = true) {
         MainScreenContent(
             state = MainViewState(),
+            getIncident = { IncidentDTO() }
         )
     }
 }
