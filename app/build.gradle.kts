@@ -2,7 +2,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.hiltAndroid)
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
+
+    //  id("kotlin-kapt")
 }
 
 
@@ -44,7 +46,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
     packaging {
         resources {
@@ -78,8 +80,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+  //  implementation(libs.hilt.android)
+   // kapt(libs.hilt.compiler)
+    val hilt = "2.50"
+    implementation("com.google.dagger:hilt-android:$hilt")
+    ksp("com.google.dagger:hilt-compiler:$hilt")
 
     // Retrofit
     implementation(libs.retrofit)
@@ -109,6 +114,6 @@ dependencies {
 }
 
 // Allow references to generated code
-kapt {
+/*kapt {
     correctErrorTypes = true
-}
+}*/
