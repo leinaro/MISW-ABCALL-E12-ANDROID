@@ -1,4 +1,4 @@
-package com.misw.abcall.ui.user
+package com.misw.abcall.ui.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.misw.abcall.R
 import com.misw.abcall.R.string
-import com.misw.abcall.ui.Routes
 import com.misw.abcall.ui.UserIntent
 import com.misw.abcall.ui.UserIntent.SearchIncident
 import com.misw.abcall.ui.theme.ABCallTheme

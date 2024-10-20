@@ -3,8 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.hiltAndroid)
     id("com.google.devtools.ksp")
-
-    //  id("kotlin-kapt")
+    alias(libs.plugins.screenshot)
 }
 
 
@@ -48,6 +47,8 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.11"
     }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -60,6 +61,15 @@ android {
 
     lint {
         baseline = file("lint-baseline.xml")
+    }
+    testFixtures  {
+        enable = true
+        androidResources = true
+    }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
     }
 }
 
@@ -103,6 +113,13 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.7.0-alpha01")
 
     testImplementation(libs.junit)
+ //   testImplementation(libs.hilt.android.testing)
+ //   kaptTest(libs.hilt.android.compiler)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    screenshotTestImplementation(libs.androidx.ui.tooling)
+
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
