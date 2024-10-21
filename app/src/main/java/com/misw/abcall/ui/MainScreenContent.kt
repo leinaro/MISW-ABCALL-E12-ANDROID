@@ -3,15 +3,11 @@ package com.misw.abcall.ui
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -53,7 +49,7 @@ import com.misw.abcall.ui.state.ABCallEvent.ShowSuccess
 import com.misw.abcall.ui.state.MainViewState
 import com.misw.abcall.ui.theme.ABCallTheme
 import com.misw.abcall.ui.user.IncidentDetailsScreen
-import com.misw.abcall.ui.user.SearchIncidentScreenContent
+import com.misw.abcall.ui.search.SearchIncidentScreenContent
 import com.misw.abcall.ui.user.UserDetailsScreen
 import com.misw.abcall.ui.user.UserIncidentListScreen
 import kotlinx.coroutines.launch

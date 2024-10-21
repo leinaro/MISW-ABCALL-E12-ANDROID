@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.NetworkRequest.Builder
 import com.misw.abcall.data.NetworkStatus.Connected
 import com.misw.abcall.data.NetworkStatus.Disconnected
@@ -29,7 +30,8 @@ interface NetworkConnectivityService {
 }
 
 class NetworkConnectivityServiceImpl @Inject constructor(
-    @ApplicationContext val context: Context
+    @ApplicationContext val context: Context,
+    private val request: NetworkRequest,
 ): NetworkConnectivityService {
     private val connectivityManager = context.getSystemService(
         Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -65,12 +67,6 @@ class NetworkConnectivityServiceImpl @Inject constructor(
             }
 
         }
-
-        val request = Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-            .build()
 
         connectivityManager.registerNetworkCallback(request, connectivityCallback)
 

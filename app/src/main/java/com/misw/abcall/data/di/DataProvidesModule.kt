@@ -1,6 +1,9 @@
 package com.misw.abcall.data.di
 
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import com.misw.abcall.data.api.ABCallApi
+import dagger.Component.Factory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,5 +41,11 @@ object DataProvidesModule {
         retrofit: Retrofit,
     ): ABCallApi = retrofit.create(ABCallApi::class.java)
 
+    @Provides
+    fun provideNetworkRquest() = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+        .build()
 }
 
