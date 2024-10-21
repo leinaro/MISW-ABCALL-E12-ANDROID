@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.hiltAndroid)
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
+    alias(libs.plugins.screenshot)
 }
 
 
@@ -44,8 +45,10 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -58,6 +61,15 @@ android {
 
     lint {
         baseline = file("lint-baseline.xml")
+    }
+    testFixtures  {
+        enable = true
+        androidResources = true
+    }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
     }
 }
 
@@ -78,8 +90,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+  //  implementation(libs.hilt.android)
+   // kapt(libs.hilt.compiler)
+    val hilt = "2.50"
+    implementation("com.google.dagger:hilt-android:$hilt")
+    ksp("com.google.dagger:hilt-compiler:$hilt")
 
     // Retrofit
     implementation(libs.retrofit)
@@ -98,6 +113,13 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.7.0-alpha01")
 
     testImplementation(libs.junit)
+ //   testImplementation(libs.hilt.android.testing)
+ //   kaptTest(libs.hilt.android.compiler)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    screenshotTestImplementation(libs.androidx.ui.tooling)
+
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -109,6 +131,6 @@ dependencies {
 }
 
 // Allow references to generated code
-kapt {
+/*kapt {
     correctErrorTypes = true
-}
+}*/

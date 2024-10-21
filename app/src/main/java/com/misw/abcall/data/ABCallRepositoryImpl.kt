@@ -35,6 +35,7 @@ class ABCallRepositoryImpl @Inject constructor(
                         NetworkStatus.Unknown -> _isInternetAvailable.value = true
                         NetworkStatus.Connected -> _isInternetAvailable.value = true
                         NetworkStatus.Disconnected -> _isInternetAvailable.value = false
+                        else -> {}
                     }
                 }
         }
@@ -73,8 +74,8 @@ class ABCallRepositoryImpl @Inject constructor(
         return flow {
             try {
                 _isRefreshing.value = true
-                val albums = remoteDataSource.getUser(query)
-                emit(albums)
+                val user = remoteDataSource.getUser(query)
+                emit(user)
                 _isRefreshing.value = false
             } catch (e: Exception) {
                 _isRefreshing.value = false
