@@ -37,6 +37,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.misw.abcall.R
 import com.misw.abcall.domain.IncidentDTO
+import com.misw.abcall.ui.chat.ActivateChatScreen
+import com.misw.abcall.ui.chat.ChatMessage
+import com.misw.abcall.ui.chat.ChatScreen
 import com.misw.abcall.ui.common.ABCallTopAppBar
 import com.misw.abcall.ui.common.InfoDialog
 import com.misw.abcall.ui.common.LocaleDropdownMenu
@@ -136,7 +139,7 @@ import kotlinx.coroutines.launch
                 "chat" -> {}
                 else -> {
                     ExtendedFloatingActionButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { launchIntent(UserIntent.StartChat) },
                         containerColor = Color(0xFFEADDFF),
                         contentColor = Color(0xFF21005D),
                     ) {
@@ -155,9 +158,10 @@ import kotlinx.coroutines.launch
                 }
             )
         },
-        /* snackbarHost = {
+         snackbarHost = {
+             SnackbarHost(hostState = snackbarHostState)
          },
-         bottomBar = {
+/*         bottomBar = {
              ABCallNavigationBar(
                  onItemSelected = { selected ->
                      selectedItem = selected
@@ -213,6 +217,22 @@ import kotlinx.coroutines.launch
                     )) { backStackEntry ->
                     val userId = backStackEntry.arguments?.getInt("userId")
                     UserDetailsScreen(userId = userId, navController = navController)
+                }
+                composable(
+                    route = Routes.ActivateChat.path,
+                ) {
+                    ActivateChatScreen(
+                        launchIntent = launchIntent,
+                    )
+                }
+                composable(
+                    route = Routes.Chat.path,
+                ) {
+                    ChatScreen(
+                        launchIntent = launchIntent,
+                        list = state.messageList,
+                        isTyping = state.isTyping,
+                    )
                 }
             }
             /*

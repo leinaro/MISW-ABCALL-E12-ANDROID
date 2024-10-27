@@ -1,10 +1,16 @@
 package com.misw.abcall.ui.user
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +25,8 @@ import com.misw.abcall.ui.theme.ABCallTheme
 fun IncidentDetailsScreen(incidentId: Int? = null, incident: IncidentDTO?) {
     Column(
         modifier = Modifier.fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(
@@ -34,6 +41,8 @@ fun IncidentDetailsScreen(incidentId: Int? = null, incident: IncidentDTO?) {
         DataBox("Estado", incident?.status.orEmpty())
         DataBox("Creación", incident?.date.orEmpty())
         DataBox("Ultima Actualización", incident?.date.orEmpty())
+
+        Spacer(modifier = Modifier.fillMaxWidth().height(70.dp))
 
     }
 }
