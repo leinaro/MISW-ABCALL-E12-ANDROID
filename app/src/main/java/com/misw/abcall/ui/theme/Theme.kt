@@ -63,7 +63,7 @@ fun ABCallTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = LightColorScheme,//colorScheme,
         typography = Typography,
         content = content
     )

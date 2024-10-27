@@ -5,16 +5,20 @@ import androidx.lifecycle.viewModelScope
 import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.Routes.IncidentDetails
+import com.misw.abcall.ui.chat.ChatMessage
 import com.misw.abcall.ui.state.ABCallEvent
 import com.misw.abcall.ui.state.ABCallEvent.NavigateTo
 import com.misw.abcall.ui.state.MainViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,15 +38,28 @@ class ABCallViewModel @Inject constructor(
 
     var incidentDTO: IncidentDTO? = null
 
-    private fun searchIncidentOrUser(query: String) {
+    private fun searchIncidentOrUser(query: String, isChatBot: Boolean = false) {
         val mutex = Mutex()
         viewModelScope.launch {
             mutex.withLock {
                 repository.getIncident(query)
                     .catch {
-                        setEvent(
-                            ABCallEvent.ShowError(it.message ?: "Error al consultar datos")
-                        )
+                        if (isChatBot){
+                            _state.update { state ->
+                                state.copy(
+                                    isTyping = false,
+                                    messageList = state.messageList + ChatMessage(
+                                        message = "Lo siento no encuentro un incidente con ese id.",
+                                        isAgent = true,
+                                    )
+                                )
+                            }
+                        } else{
+                            setEvent(
+                                ABCallEvent.ShowError(it.message ?: "Error al consultar datos")
+                            )
+                        }
+
                     }
                     .collect { incident ->
                         /*setState(
@@ -51,12 +68,25 @@ class ABCallViewModel @Inject constructor(
                             )
                         )*/
                         incidentDTO = incident
-                        setEvent(
-                            NavigateTo(IncidentDetails.path.replace("{incidentId}",incident.id.orEmpty() ))
-                        )
+                        if (isChatBot){
+                            setEvent(
+                                NavigateTo(IncidentDetails.path.replace("{incidentId}",incident.id.orEmpty() ))
+                            )
+                        }
+                        else {
+                            _state.update { state ->
+                                state.copy(
+                                    isTyping = false,
+                                    messageList = state.messageList + ChatMessage(
+                                        message = "El incidente ${incident.id} se encuentra en estado ${incident.status}",
+                                        isAgent = true,
+                                    )
+                                )
+                            }
+                        }
                     }
 
-                _state.value = MainViewState("Android")
+                //_state.value = MainViewState("Android")
 
             }
         }
@@ -79,6 +109,70 @@ class ABCallViewModel @Inject constructor(
                 is UserIntent.SearchIncident -> {
                     searchIncidentOrUser(userIntent.query)
                 }
+                is UserIntent.ActivateChat -> {
+                    setEvent(NavigateTo(Routes.Chat.path))
+                }
+                is UserIntent.StartChat -> {
+                    setEvent(NavigateTo(Routes.ActivateChat.path))
+                }
+                is UserIntent.SendMessage -> {
+                    _state.update { state ->
+                        state.copy(
+                            isTyping = true,
+                            messageList = state.messageList + ChatMessage(
+                                message = userIntent.message,
+                                isAgent = false,
+                            )
+                        )
+                    }
+                    if (userIntent.message.contains("consultar", true)) {
+                        viewModelScope.launch {
+                            delay(1000)
+                            _state.update { state ->
+                                state.copy(
+                                    isTyping = false,
+                                    messageList = state.messageList + ChatMessage(
+                                        message = "Escribe el número de incidente de quieres consultar",
+                                        isAgent = true,
+                                    )
+                                )
+                            }
+                        }
+                    } else if(isUUID(userIntent.message)){
+                        viewModelScope.launch {
+                            searchIncidentOrUser(userIntent.message, isChatBot = true)
+                        }
+                    } else if(userIntent.message.contains("reportar", true)){
+                        // todo
+                    } else if (userIntent.message.contains("hola", true)) {
+                        viewModelScope.launch {
+                            delay(1000)
+                            _state.update { state ->
+                                state.copy(
+                                    isTyping = false,
+                                    messageList = state.messageList + ChatMessage(
+                                        message = "Hola, ¿En qué puedo ayudarte?",
+                                        isAgent = true,
+                                    )
+                                )
+                            }
+                        }
+
+                    } else {
+                        viewModelScope.launch {
+                            delay(1000)
+                            _state.update { state ->
+                                state.copy(
+                                    isTyping = false,
+                                    messageList = state.messageList + ChatMessage(
+                                        message = "No entiendo tu mensaje",
+                                        isAgent = true,
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
             }
 
     }
@@ -88,5 +182,16 @@ class ABCallViewModel @Inject constructor(
 
 sealed class UserIntent{
     data class SearchIncident(val query: String): UserIntent()
+    object ActivateChat: UserIntent()
+    object StartChat: UserIntent()
+    data class SendMessage(val message: String): UserIntent()
+}
 
+fun isUUID(input: String): Boolean {
+    return try {
+        UUID.fromString(input)
+        true
+    } catch (e: IllegalArgumentException) {
+        false
+    }
 }
