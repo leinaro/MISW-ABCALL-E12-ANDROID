@@ -4,7 +4,7 @@ import com.misw.abcall.ui.chat.ChatMessage
 
 data class MainViewState(
     val name: String = "Android",
-    val messageList: List<ChatMessage> = listOf(ChatMessage()),
+    val messageList: List<ChatMessage> = emptyList(),
     val isTyping: Boolean = false,
 )
 
