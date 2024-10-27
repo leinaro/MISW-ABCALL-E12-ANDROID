@@ -2,6 +2,7 @@ package com.misw.abcall.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.misw.abcall.data.api.ChatMessageDTO
 import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.Routes.IncidentDetails
@@ -38,6 +39,63 @@ class ABCallViewModel @Inject constructor(
 
     var incidentDTO: IncidentDTO? = null
 
+    private lateinit var chatUUID: String
+
+   private fun startChat(){
+       viewModelScope.launch {
+           repository.start()
+               .catch {
+                   setEvent(
+                       ABCallEvent.ShowError(it.message ?: "No se pudo iniciar la conversación")
+                   )
+               }
+               .collect {
+                   setEvent(NavigateTo(Routes.Chat.path))
+                     chatUUID = it
+                   _state.update { state ->
+                       state.copy(
+                           isTyping = false,
+                           messageList = state.messageList + ChatMessage()
+                       )
+                   }
+               }
+
+       }
+   }
+
+    private fun chat(message: String) {
+        val mutex = Mutex()
+        viewModelScope.launch {
+            mutex.withLock {
+                repository.chat(ChatMessageDTO(
+                    chatUUID, message
+                ))
+                    .catch {
+                        _state.update { state ->
+                            state.copy(
+                                isTyping = false,
+                                messageList = state.messageList + ChatMessage(
+                                    message = "Lo siento no pude realizar esta operación",
+                                    isAgent = true,
+                                )
+                            )
+                        }
+                    }
+                    .collect { message ->
+                        _state.update { state ->
+                            state.copy(
+                                isTyping = false,
+                                messageList = state.messageList + ChatMessage(
+                                    message = message,
+                                    isAgent = true,
+                                )
+                            )
+                        }
+                    }
+            }
+        }
+    }
+
     private fun searchIncidentOrUser(query: String, isChatBot: Boolean = false) {
         val mutex = Mutex()
         viewModelScope.launch {
@@ -68,7 +126,7 @@ class ABCallViewModel @Inject constructor(
                             )
                         )*/
                         incidentDTO = incident
-                        if (isChatBot){
+                        if (!isChatBot){
                             setEvent(
                                 NavigateTo(IncidentDetails.path.replace("{incidentId}",incident.id.orEmpty() ))
                             )
@@ -85,9 +143,6 @@ class ABCallViewModel @Inject constructor(
                             }
                         }
                     }
-
-                //_state.value = MainViewState("Android")
-
             }
         }
     }
@@ -110,7 +165,7 @@ class ABCallViewModel @Inject constructor(
                     searchIncidentOrUser(userIntent.query)
                 }
                 is UserIntent.ActivateChat -> {
-                    setEvent(NavigateTo(Routes.Chat.path))
+                    startChat()
                 }
                 is UserIntent.StartChat -> {
                     setEvent(NavigateTo(Routes.ActivateChat.path))
@@ -138,15 +193,19 @@ class ABCallViewModel @Inject constructor(
                                 )
                             }
                         }
-                    } else if(isUUID(userIntent.message)){
+                    }
+                    else if(isUUID(userIntent.message)){
                         viewModelScope.launch {
                             searchIncidentOrUser(userIntent.message, isChatBot = true)
                         }
-                    } else if(userIntent.message.contains("reportar", true)){
-                        // todo
-                    } else if (userIntent.message.contains("hola", true)) {
+                    }
+                   /* else if(userIntent.message.contains("crear", true)){
                         viewModelScope.launch {
-                            delay(1000)
+                            chat(userIntent.message)
+                        }
+                    }*/
+                    else if (userIntent.message.contains("hola", true)) {
+                        viewModelScope.launch {
                             _state.update { state ->
                                 state.copy(
                                     isTyping = false,
@@ -160,6 +219,9 @@ class ABCallViewModel @Inject constructor(
 
                     } else {
                         viewModelScope.launch {
+                            chat(userIntent.message)
+                        }
+                        /*viewModelScope.launch {
                             delay(1000)
                             _state.update { state ->
                                 state.copy(
@@ -170,7 +232,7 @@ class ABCallViewModel @Inject constructor(
                                     )
                                 )
                             }
-                        }
+                        }*/
                     }
                 }
             }
