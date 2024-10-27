@@ -1,5 +1,6 @@
 package com.misw.abcall.data
 
+import com.misw.abcall.data.api.ChatMessageDTO
 import com.misw.abcall.data.api.RemoteDataSource
 import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
@@ -67,7 +68,40 @@ class ABCallRepositoryImpl @Inject constructor(
                 e.toUiError()
             }
         }
+    }
 
+    override fun start(): Flow<String> {
+        return flow {
+            try {
+                _isRefreshing.value = true
+                val response = remoteDataSource.startChat()
+                emit(response)
+                _isRefreshing.value = false
+            } catch (e: Exception) {
+                _isRefreshing.value = false
+                e.toUiError()
+            }
+        }
+    }
+
+    override fun chat(message: ChatMessageDTO): Flow<String> {
+        return flow {
+            try {
+                _isRefreshing.value = true
+                val response = remoteDataSource.chat(message)
+                response.msg?.let {
+                    emit(it)
+                }?: run {
+                    response.id?.let {
+                        emit("He creado el incidente con el id $it y se encuentra en estado " )
+                    }
+                }
+                _isRefreshing.value = false
+            } catch (e: Exception) {
+                _isRefreshing.value = false
+                e.toUiError()
+            }
+        }
     }
 
     override fun getUser(query: String): Flow<UserDTO> {

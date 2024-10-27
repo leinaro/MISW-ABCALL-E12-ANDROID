@@ -10,4 +10,8 @@
 
   <string name="en">Inglés</string>
   <string name="es">Español</string>
+  <string name="required_not_empty">El campo no puede estar vacío</string>
+  <string name="max_char_limit">El campo debe tener minimo 1$s caracteres</string>
+  <string name="how_would_you_rate_this_chat">¿Cómo calificarías este chat?</string>
+  <string name="escribe_un_mensaje">Escribe un mensaje...</string>
 </resources>

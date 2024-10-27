@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.misw.abcall.R
@@ -27,7 +28,9 @@ fun RateChat(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.background(Color.White).fillMaxWidth(),
+        modifier = modifier
+            .background(Color.White)
+            .fillMaxWidth(),
         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         ){
@@ -41,7 +44,7 @@ fun RateChat(
                 .padding(12.dp)
         )
             Text(
-                text = "How would you rate this chat?",
+                text = stringResource(R.string.how_would_you_rate_this_chat),
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier.padding(start = 16.dp)
             )
