@@ -59,7 +59,22 @@ fun SplashScreen(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.titleLarge,
             text = stringResource(id = R.string.app_name),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.labelSmall,
+            text = "Version v2.0-02-11-2024",
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.labelSmall,
+            text = "by Tears Of The Devs",
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.primary,
         )
