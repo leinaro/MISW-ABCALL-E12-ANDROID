@@ -1,6 +1,7 @@
 package com.misw.abcall.data
 
 import com.misw.abcall.data.api.ChatMessageDTO
+import com.misw.abcall.data.api.LocalDataSource
 import com.misw.abcall.data.api.RemoteDataSource
 import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
@@ -19,6 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class ABCallRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource,
     private val networkConnectivityService: NetworkConnectivityService,
 ): ABCallRepository {
     private val _isRefreshing = MutableStateFlow(false)
@@ -118,6 +120,13 @@ class ABCallRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getSelectedLanguage(): Flow<String?> {
+        return localDataSource.getSelectedLanguage()
+    }
+
+    override suspend fun updateSelectedLanguage(code: String) {
+        return localDataSource.updateSelectedLanguage(code)
+    }
 }
 
 fun Exception.toUiError() {

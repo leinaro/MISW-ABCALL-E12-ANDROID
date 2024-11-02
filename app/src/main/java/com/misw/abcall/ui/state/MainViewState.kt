@@ -6,6 +6,7 @@ data class MainViewState(
     val name: String = "Android",
     val messageList: List<ChatMessage> = emptyList(),
     val isTyping: Boolean = false,
+    val selectedLanguage: String? = null,
 )
 
 sealed class ABCallEvent{

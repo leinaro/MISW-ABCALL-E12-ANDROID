@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.Icons.Outlined
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.misw.abcall.R
+import com.misw.abcall.ui.Routes
 import com.misw.abcall.ui.Routes.SearchIncident
 import com.misw.abcall.ui.theme.ABCallTheme
 
@@ -57,6 +59,16 @@ fun ABCallTopAppBar(
                 Icon(
                     imageVector = Outlined.Info,
                     contentDescription = "Info",
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+            IconButton(onClick = {
+//                navController.navigateUp()
+                navController.navigate(Routes.Language.path)
+            }) {
+                Icon(
+                    imageVector = Outlined.MoreVert,
+                    contentDescription = "More",
                     tint = MaterialTheme.colorScheme.primary,
                 )
             }

@@ -1,6 +1,5 @@
 package com.misw.abcall.ui
 
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -42,7 +40,6 @@ import com.misw.abcall.ui.chat.ChatMessage
 import com.misw.abcall.ui.chat.ChatScreen
 import com.misw.abcall.ui.common.ABCallTopAppBar
 import com.misw.abcall.ui.common.InfoDialog
-import com.misw.abcall.ui.common.LocaleDropdownMenu
 import com.misw.abcall.ui.state.ABCallEvent
 import com.misw.abcall.ui.state.ABCallEvent.Idle
 import com.misw.abcall.ui.state.ABCallEvent.NavigateBack
@@ -57,22 +54,16 @@ import com.misw.abcall.ui.user.UserDetailsScreen
 import com.misw.abcall.ui.user.UserIncidentListScreen
 import kotlinx.coroutines.launch
 
-//@OptIn(ExperimentalMaterialApi::class)
 @Composable fun MainScreenContent(
     state: MainViewState,
     event: ABCallEvent = Idle,
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     launchIntent: (UserIntent) -> Unit = {},
-    getIncident: () -> IncidentDTO?,
+    getIncident: () -> IncidentDTO?
 ) {
-    val context = LocalContext.current
 
     val navController = rememberNavController()
-
-/*    fun navigateTo(route: String) {
-        navController.navigate(route)
-    }*/
 
     var selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf("albums", "artists", "collectors")
@@ -80,12 +71,6 @@ import kotlinx.coroutines.launch
     val scope = rememberCoroutineScope()
     var isInfoDialogVisible by remember { mutableStateOf(false) }
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
-
-    /*
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = isRefreshing,
-        onRefresh = onRefresh
-    )*/
 
     fun showSnackBar(message: String) {
         try {
@@ -136,8 +121,7 @@ import kotlinx.coroutines.launch
     Scaffold(
         floatingActionButton = {
             when (currentBackStackEntry?.destination?.route){
-                "chat" -> {}
-                else -> {
+                Routes.SearchIncident.path -> {
                     ExtendedFloatingActionButton(
                         onClick = { launchIntent(UserIntent.StartChat) },
                         containerColor = Color(0xFFEADDFF),
@@ -147,7 +131,7 @@ import kotlinx.coroutines.launch
                         Spacer(modifier = Modifier.width(12.dp))
                         Text("Hablar con un agente")
                     }
-                }
+                } else -> {}
             }
         },
         topBar = {
@@ -176,12 +160,6 @@ import kotlinx.coroutines.launch
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            LocaleDropdownMenu(
-                onLocaleSelected = { locale ->
-                    val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(locale)
-                    AppCompatDelegate.setApplicationLocales(appLocale)
-                }
-            )
             NavHost(
                 navController = navController,
                 startDestination = Routes.SearchIncident.path,
@@ -191,6 +169,13 @@ import kotlinx.coroutines.launch
             ) {
                 composable(Routes.SearchIncident.path) {
                     SearchIncidentScreenContent(
+                        launchIntent = launchIntent,
+                    )
+                }
+                composable(Routes.Language.path) {
+                    LanguageSelectionComponent(
+                        selectedLanguage = state.selectedLanguage,
+                        navController = navController,
                         launchIntent = launchIntent,
                     )
                 }
@@ -235,12 +220,6 @@ import kotlinx.coroutines.launch
                     )
                 }
             }
-            /*
-                        PullRefreshIndicator(
-                            modifier = Modifier.align(Alignment.TopCenter),
-                            refreshing = isRefreshing,
-                            state = pullRefreshState,
-                        )*/
 
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar {
