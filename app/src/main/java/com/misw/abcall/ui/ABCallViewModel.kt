@@ -7,6 +7,8 @@ import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.Routes.IncidentDetails
 import com.misw.abcall.ui.chat.ChatMessage
+import com.misw.abcall.ui.UserIntent.SearchIncident
+import com.misw.abcall.ui.UserIntent.UpdateLanguage
 import com.misw.abcall.ui.state.ABCallEvent
 import com.misw.abcall.ui.state.ABCallEvent.NavigateTo
 import com.misw.abcall.ui.state.MainViewState
@@ -15,6 +17,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -40,6 +45,11 @@ class ABCallViewModel @Inject constructor(
     var incidentDTO: IncidentDTO? = null
 
     private lateinit var chatUUID: String
+
+    init {
+        getSelectedLanguage()
+    }
+
 
    private fun startChat(){
        viewModelScope.launch {
@@ -147,6 +157,25 @@ class ABCallViewModel @Inject constructor(
         }
     }
 
+    private fun getSelectedLanguage() {
+        viewModelScope.launch {
+            repository.getSelectedLanguage()
+                .collect { code ->
+                    _state.update {
+                        it.copy(
+                            selectedLanguage = code
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun updateSelectedLanguage(code: String) {
+        viewModelScope.launch {
+            repository.updateSelectedLanguage(code)
+        }
+    }
+
     private fun setState(newState: MainViewState) {
         _state.value = newState
     }
@@ -161,7 +190,7 @@ class ABCallViewModel @Inject constructor(
 
     fun onUserIntent(userIntent: UserIntent) {
             when (userIntent) {
-                is UserIntent.SearchIncident -> {
+                is SearchIncident -> {
                     searchIncidentOrUser(userIntent.query)
                 }
                 is UserIntent.ActivateChat -> {
@@ -235,6 +264,10 @@ class ABCallViewModel @Inject constructor(
                         }*/
                     }
                 }
+
+                is UpdateLanguage -> {
+                    updateSelectedLanguage(userIntent.code)
+                }
             }
 
     }
@@ -242,11 +275,12 @@ class ABCallViewModel @Inject constructor(
     fun getIncident() = incidentDTO
 }
 
-sealed class UserIntent{
-    data class SearchIncident(val query: String): UserIntent()
-    object ActivateChat: UserIntent()
-    object StartChat: UserIntent()
-    data class SendMessage(val message: String): UserIntent()
+sealed class UserIntent {
+    data class SearchIncident(val query: String) : UserIntent()
+    object ActivateChat : UserIntent()
+    object StartChat : UserIntent()
+    data class SendMessage(val message: String) : UserIntent()
+    data class UpdateLanguage(val code: String) : UserIntent()
 }
 
 fun isUUID(input: String): Boolean {

@@ -10,6 +10,8 @@ interface ABCallRepository {
     fun getUser(query: String): Flow<UserDTO>
     fun start(): Flow<String>
     fun chat(message: ChatMessageDTO): Flow<String>
+    fun getSelectedLanguage(): Flow<String?>
+    suspend fun updateSelectedLanguage(code: String)
 
     val isRefreshing: StateFlow<Boolean>
     val isInternetAvailable: StateFlow<Boolean>
