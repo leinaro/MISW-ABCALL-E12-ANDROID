@@ -23,8 +23,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
@@ -36,10 +36,10 @@ import androidx.navigation.navArgument
 import com.misw.abcall.R
 import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.chat.ActivateChatScreen
-import com.misw.abcall.ui.chat.ChatMessage
 import com.misw.abcall.ui.chat.ChatScreen
 import com.misw.abcall.ui.common.ABCallTopAppBar
 import com.misw.abcall.ui.common.InfoDialog
+import com.misw.abcall.ui.search.SearchIncidentScreenContent
 import com.misw.abcall.ui.state.ABCallEvent
 import com.misw.abcall.ui.state.ABCallEvent.Idle
 import com.misw.abcall.ui.state.ABCallEvent.NavigateBack
@@ -49,7 +49,6 @@ import com.misw.abcall.ui.state.ABCallEvent.ShowSuccess
 import com.misw.abcall.ui.state.MainViewState
 import com.misw.abcall.ui.theme.ABCallTheme
 import com.misw.abcall.ui.user.IncidentDetailsScreen
-import com.misw.abcall.ui.search.SearchIncidentScreenContent
 import com.misw.abcall.ui.user.UserDetailsScreen
 import com.misw.abcall.ui.user.UserIncidentListScreen
 import kotlinx.coroutines.launch
@@ -129,7 +128,7 @@ import kotlinx.coroutines.launch
                     ) {
                         Icon(painter = painterResource(id = R.drawable.ic_support_agent), contentDescription = null)
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text("Hablar con un agente")
+                        Text(stringResource(R.string.hablar_con_un_agente))
                     }
                 } else -> {}
             }
