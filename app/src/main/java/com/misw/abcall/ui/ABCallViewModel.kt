@@ -10,6 +10,7 @@ import com.misw.abcall.ui.UserIntent.SearchIncident
 import com.misw.abcall.ui.UserIntent.UpdateLanguage
 import com.misw.abcall.ui.chat.ChatMessage
 import com.misw.abcall.ui.state.ABCallEvent
+import com.misw.abcall.ui.state.ABCallEvent.Idle
 import com.misw.abcall.ui.state.ABCallEvent.NavigateTo
 import com.misw.abcall.ui.state.MainViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,7 +42,7 @@ class ABCallViewModel @Inject constructor(
 
     var incidentDTO: IncidentDTO? = null
 
-    private lateinit var chatUUID: String
+    private var chatUUID: String? = null
 
     init {
         getSelectedLanguage()
@@ -57,14 +58,14 @@ class ABCallViewModel @Inject constructor(
                    )
                }
                .collect {
-                   setEvent(NavigateTo(Routes.Chat.path))
-                     chatUUID = it
+                   chatUUID = it
                    _state.update { state ->
                        state.copy(
                            isTyping = false,
                            messageList = state.messageList + ChatMessage()
                        )
                    }
+                   setEvent(NavigateTo(Routes.Chat.path))
                }
 
        }
@@ -177,11 +178,13 @@ class ABCallViewModel @Inject constructor(
         _state.value = newState
     }
 
-    fun setEvent(event: ABCallEvent) {
+    private fun setEvent(event: ABCallEvent) {
         viewModelScope.launch {
             //mutex.withLock {
             _event.value = event
             //}
+            //delay(200)
+            //_event.value = Idle
         }
     }
 
@@ -190,11 +193,16 @@ class ABCallViewModel @Inject constructor(
                 is SearchIncident -> {
                     searchIncidentOrUser(userIntent.query)
                 }
-                is UserIntent.ActivateChat -> {
+                is UserIntent.OpenChat -> {
                     startChat()
                 }
-                is UserIntent.StartChat -> {
-                    setEvent(NavigateTo(Routes.ActivateChat.path))
+                is UserIntent.OpenActivateChat -> {
+                    if (chatUUID == null) {
+                        setEvent(NavigateTo(Routes.ActivateChat.path))
+                    }
+                    else {
+                        setEvent(NavigateTo(Routes.Chat.path))
+                    }
                 }
                 is UserIntent.SendMessage -> {
                     _state.update { state ->
@@ -208,7 +216,7 @@ class ABCallViewModel @Inject constructor(
                     }
                     if (userIntent.message.contains("consultar", true)) {
                         viewModelScope.launch {
-                            delay(1000)
+                            delay(500)
                             _state.update { state ->
                                 state.copy(
                                     isTyping = false,
@@ -274,8 +282,8 @@ class ABCallViewModel @Inject constructor(
 
 sealed class UserIntent {
     data class SearchIncident(val query: String) : UserIntent()
-    object ActivateChat : UserIntent()
-    object StartChat : UserIntent()
+    object OpenChat : UserIntent()
+    object OpenActivateChat : UserIntent()
     data class SendMessage(val message: String) : UserIntent()
     data class UpdateLanguage(val code: String) : UserIntent()
 }

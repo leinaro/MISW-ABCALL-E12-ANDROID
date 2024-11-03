@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun LanguageSelectionComponent(
+    modifier: Modifier = Modifier,
     selectedLanguage: String? = null,
     launchIntent: (UserIntent)->Unit = {},
     navController: NavController = rememberNavController()
@@ -37,7 +38,7 @@ fun LanguageSelectionComponent(
     ) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 25.dp),
         verticalArrangement = Arrangement.Center,
