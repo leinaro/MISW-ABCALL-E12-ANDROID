@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -110,7 +111,11 @@ import kotlinx.coroutines.launch
             }
 
             is NavigateTo -> {
-                navController.navigate(event.route)
+                navController.navigate(event.route) {
+                    if (event.route == Routes.Chat.path){
+                        popUpTo(Routes.ActivateChat.path) { inclusive = true }
+                    }
+                }
             }
 
             is Idle -> Unit
@@ -118,11 +123,13 @@ import kotlinx.coroutines.launch
     }
 
     Scaffold(
+        modifier = Modifier.testTag("MainScreenContent"),
         floatingActionButton = {
             when (currentBackStackEntry?.destination?.route){
                 Routes.SearchIncident.path -> {
                     ExtendedFloatingActionButton(
-                        onClick = { launchIntent(UserIntent.StartChat) },
+                        modifier = Modifier.testTag("StartChatBotButton"),
+                        onClick = { launchIntent(UserIntent.OpenActivateChat) },
                         containerColor = Color(0xFFEADDFF),
                         contentColor = Color(0xFF21005D),
                     ) {
@@ -168,11 +175,13 @@ import kotlinx.coroutines.launch
             ) {
                 composable(Routes.SearchIncident.path) {
                     SearchIncidentScreenContent(
+                        modifier = Modifier.testTag("SearchIncidentScreenContent"),
                         launchIntent = launchIntent,
                     )
                 }
                 composable(Routes.Language.path) {
                     LanguageSelectionComponent(
+                        modifier = Modifier.testTag("LanguageSelectionComponent"),
                         selectedLanguage = state.selectedLanguage,
                         navController = navController,
                         launchIntent = launchIntent,
@@ -206,6 +215,7 @@ import kotlinx.coroutines.launch
                     route = Routes.ActivateChat.path,
                 ) {
                     ActivateChatScreen(
+                        modifier = Modifier.testTag("ActivateChatScreen"),
                         launchIntent = launchIntent,
                     )
                 }
@@ -213,6 +223,7 @@ import kotlinx.coroutines.launch
                     route = Routes.Chat.path,
                 ) {
                     ChatScreen(
+                        modifier = Modifier.testTag("ChatScreen"),
                         launchIntent = launchIntent,
                         list = state.messageList,
                         isTyping = state.isTyping,

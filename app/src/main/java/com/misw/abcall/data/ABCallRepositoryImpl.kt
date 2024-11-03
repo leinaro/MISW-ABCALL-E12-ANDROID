@@ -95,7 +95,7 @@ class ABCallRepositoryImpl @Inject constructor(
                     emit(it)
                 }?: run {
                     response.id?.let {
-                        emit("He creado el incidente con el id $it y se encuentra en estado " )
+                        emit("He creado el incidente con el id $it y se encuentra en estado ${response.status}" )
                     }
                 }
                 _isRefreshing.value = false

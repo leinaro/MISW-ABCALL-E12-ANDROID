@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -43,6 +44,7 @@ import com.misw.abcall.ui.theme.ABCallTheme
 
 @Composable
 fun ChatScreen(
+    modifier: Modifier = Modifier,
     launchIntent: (UserIntent)->Unit = {},
     list: List<ChatMessage> = emptyList(),
     isTyping: Boolean = false
@@ -54,11 +56,11 @@ fun ChatScreen(
     }
 
     Column (
-        modifier = Modifier.background(Color(0xFFE3E3E3))
-    ){
+        modifier = modifier.background(Color(0xFFE3E3E3))
+    ){/*
         RateChat(
             modifier = Modifier,
-        )
+        )*/
 
         LazyColumn(
             state = listState,
@@ -121,6 +123,7 @@ fun ChatInputField(
             value = textState,
             onValueChange = { textState = it },
             modifier = Modifier
+                .testTag("chatInput")
                 .weight(1f)
                 .padding(end = 8.dp),
             placeholder = {
@@ -141,6 +144,7 @@ fun ChatInputField(
         )
 
         IconButton(
+            modifier = Modifier.testTag("sendMessage"),
             onClick = {
                 onSendMessage(textState.text)
                 textState = TextFieldValue()
