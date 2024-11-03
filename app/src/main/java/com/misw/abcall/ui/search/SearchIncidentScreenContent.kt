@@ -35,6 +35,7 @@ import com.misw.abcall.ui.theme.ABCallTheme
 
 @Composable
 fun SearchIncidentScreenContent(
+    modifier: Modifier = Modifier,
     launchIntent: (UserIntent)->Unit = {},
 ) {
     var query by remember { mutableStateOf("") }
@@ -54,7 +55,7 @@ fun SearchIncidentScreenContent(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
@@ -71,6 +72,7 @@ fun SearchIncidentScreenContent(
         )
         OutlinedTextField(
             modifier = Modifier
+                .testTag("consultarIncidenteEdittext")
                 .fillMaxWidth(),
             placeholder = {
                 Text(

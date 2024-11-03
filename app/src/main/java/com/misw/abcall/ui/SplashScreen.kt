@@ -60,7 +60,7 @@ fun SplashScreen(
         Text(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.labelSmall,
-            text = "Version v2.0-02-11-2024",
+            text = "Version v2.0.0-02-11-2024",
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.primary,
         )

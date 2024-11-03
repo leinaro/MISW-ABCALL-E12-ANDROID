@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,11 +70,12 @@ fun ActivateChatScreen(
                     contentColor = Black
                 ),
                 modifier = Modifier
+                    .testTag("ActivateChatButton")
                     .align(CenterHorizontally)
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 22.dp),
                 onClick = {
-                    launchIntent(UserIntent.ActivateChat)
+                    launchIntent(UserIntent.OpenChat)
                 }
             ) {
                 Text(stringResource(R.string.comenzar))

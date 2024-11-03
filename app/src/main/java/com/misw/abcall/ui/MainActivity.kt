@@ -28,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,12 +43,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: ABCallViewModel by viewModels()
-/*
-    override fun attachBaseContext(newBase: Context?) {
-        super.attachBaseContext(newBase)?.let {
 
-        }
-    }*/
     override fun onCreate(savedInstanceState: Bundle?) {
         //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
          //   Language.configureLocaleOnStartForDevicesLowerThanTiramisu(this)
@@ -67,7 +63,6 @@ class MainActivity : AppCompatActivity() {
 
 
             ABCallTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
@@ -104,7 +99,7 @@ fun MainScreen(
         mutableStateOf(false)
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().testTag("MainScreen")) {
         if (isInternetAvailable.not() && offlineBannerVisible) {
             OffLineBanner {
                 offlineBannerVisible = false
