@@ -3,13 +3,11 @@ package com.misw.abcall.ui
 import android.app.LocaleManager
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
 import androidx.appcompat.app.AppCompatDelegate
 import com.misw.abcall.R
 import java.util.Locale
-
 
 sealed class Language {
 
@@ -20,7 +18,7 @@ sealed class Language {
     companion object {
 
         //Make sure you add all the languages here
-        val allowedLocales = listOf(English, Spanish/*, Tamil, Hindi, Malayalam, French*/)
+        val allowedLocales = listOf(English, Spanish, Arabic,/*Tamil, Hindi, Malayalam,*/ French)
 
         fun setLocale(context: Context, localeCode: String) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -98,6 +96,14 @@ sealed class Language {
     object Spanish : Language() {
         override val code: String = "es"
         override val titleRes: Int = R.string.es
+    }
+    object Arabic : Language() {
+        override val code: String = "ar"
+        override val titleRes: Int = R.string.ar
+    }
+    object French : Language() {
+        override val code: String = "fr"
+        override val titleRes: Int = R.string.fr
     }
 
 /*    object Tamil : Language() {

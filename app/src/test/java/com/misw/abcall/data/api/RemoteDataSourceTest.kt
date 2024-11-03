@@ -3,18 +3,14 @@ package com.misw.abcall.data.api
 import com.misw.abcall.MainDispatcherRule
 import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.domain.UserDTO
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 
 class RemoteDataSourceTest {
 

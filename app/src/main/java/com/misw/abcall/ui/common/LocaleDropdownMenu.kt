@@ -1,7 +1,6 @@
 package com.misw.abcall.ui.common
 
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.LocaleListCompat
 import com.misw.abcall.R
 import com.misw.abcall.ui.Language
 import java.util.Locale
@@ -40,16 +38,10 @@ fun LocaleDropdownMenu(
 
     val currentLocale = remember { mutableStateOf(Language.getCurrentLanguage(context)) }
 
-//    val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags("en")
-  //  AppCompatDelegate.setApplicationLocales(appLocale)
-
-
-
     val localeOptions = mapOf(
         R.string.en to "en",
-//        R.string.fr to "fr",
-//        R.string.hi to "hi",
-//        R.string.ja to "ja",
+        R.string.fr to "fr",
+        R.string.ar to "ar",
         R.string.es to "es",
     ).mapKeys { stringResource(it.key) }
     var selectedLocale by remember { mutableStateOf("en") }

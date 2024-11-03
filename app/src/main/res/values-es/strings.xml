@@ -1,17 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="app_name" translatable="false">ABCall</string>
+
   <!-- No Internet Banner -->
   <string name="no_internet_mode">Estás en modo ermitaño digital. Sin internet.</string>
-  <string name="close">cerrar</string>
+  <string name="close">Cerrar</string>
 
   <!-- Search Incident -->
-  <string name="search_incident_query">Número de incidente o documento de usuario</string>
+  <string name="search_incident_query">Número de incidente o documento del usuario</string>
   <string name="search_incident">Buscar</string>
 
+  <!-- Languages -->
   <string name="en">Inglés</string>
   <string name="es">Español</string>
+  <string name="fr">Francés</string>
+  <string name="ar">Árabe</string>
+
+  <!-- Common Messages -->
   <string name="required_not_empty">El campo no puede estar vacío</string>
-  <string name="max_char_limit">El campo debe tener minimo 1$s caracteres</string>
+  <string name="max_char_limit">El campo debe tener al menos %1$s caracteres</string>
   <string name="how_would_you_rate_this_chat">¿Cómo calificarías este chat?</string>
   <string name="escribe_un_mensaje">Escribe un mensaje...</string>
+  <string name="hablar_con_un_agente">Hablar con un agente</string>
+  <string name="hola_presiona_el_boton_de_comenzar_si_estas_de_acuerdo_con_nuestra_politica_de_manejo_de_datos">¡Hola! Presiona el botón de "Comenzar" si estás de acuerdo con nuestra política de manejo de datos.</string>
+  <string name="comenzar">Comenzar</string>
 </resources>
