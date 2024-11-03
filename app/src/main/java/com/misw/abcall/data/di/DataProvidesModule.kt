@@ -3,7 +3,6 @@ package com.misw.abcall.data.di
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import com.misw.abcall.data.api.ABCallApi
-import dagger.Component.Factory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +16,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 private const val BASE_URL = "http://10.0.2.2:5008/"
+//private const val BASE_URL = "https://api-gateway-649096178068.us-central1.run.app/"
 
 @Module
 @InstallIn(SingletonComponent::class)

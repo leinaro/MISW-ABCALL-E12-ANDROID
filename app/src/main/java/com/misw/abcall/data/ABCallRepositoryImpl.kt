@@ -1,5 +1,7 @@
 package com.misw.abcall.data
 
+import com.misw.abcall.data.api.ChatMessageDTO
+import com.misw.abcall.data.api.LocalDataSource
 import com.misw.abcall.data.api.RemoteDataSource
 import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
@@ -18,6 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class ABCallRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource,
     private val networkConnectivityService: NetworkConnectivityService,
 ): ABCallRepository {
     private val _isRefreshing = MutableStateFlow(false)
@@ -67,7 +70,40 @@ class ABCallRepositoryImpl @Inject constructor(
                 e.toUiError()
             }
         }
+    }
 
+    override fun start(): Flow<String> {
+        return flow {
+            try {
+                _isRefreshing.value = true
+                val response = remoteDataSource.startChat()
+                emit(response)
+                _isRefreshing.value = false
+            } catch (e: Exception) {
+                _isRefreshing.value = false
+                e.toUiError()
+            }
+        }
+    }
+
+    override fun chat(message: ChatMessageDTO): Flow<String> {
+        return flow {
+            try {
+                _isRefreshing.value = true
+                val response = remoteDataSource.chat(message)
+                response.msg?.let {
+                    emit(it)
+                }?: run {
+                    response.id?.let {
+                        emit("He creado el incidente con el id $it y se encuentra en estado ${response.status}" )
+                    }
+                }
+                _isRefreshing.value = false
+            } catch (e: Exception) {
+                _isRefreshing.value = false
+                e.toUiError()
+            }
+        }
     }
 
     override fun getUser(query: String): Flow<UserDTO> {
@@ -84,6 +120,13 @@ class ABCallRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getSelectedLanguage(): Flow<String?> {
+        return localDataSource.getSelectedLanguage()
+    }
+
+    override suspend fun updateSelectedLanguage(code: String) {
+        return localDataSource.updateSelectedLanguage(code)
+    }
 }
 
 fun Exception.toUiError() {

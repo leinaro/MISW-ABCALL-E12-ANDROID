@@ -15,6 +15,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.misw.abcall.R
+import com.misw.abcall.ui.Routes
 import com.misw.abcall.ui.Routes.SearchIncident
 import com.misw.abcall.ui.theme.ABCallTheme
 
@@ -34,6 +37,7 @@ fun ABCallTopAppBar(
     val baseRoute = listOf(SearchIncident.path)
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     TopAppBar(
+        modifier = Modifier.testTag("ABCallTopAppBar"),
         title = {
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -53,6 +57,15 @@ fun ABCallTopAppBar(
             }
         },
         actions = {
+            IconButton(onClick = {
+                navController.navigate(Routes.Language.path)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_language),
+                    contentDescription = "Language",
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
             IconButton(onClick = { onInfoActionClick() }) {
                 Icon(
                     imageVector = Outlined.Info,

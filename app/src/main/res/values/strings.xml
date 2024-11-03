@@ -3,16 +3,24 @@
 
   <!-- No Internet Banner -->
   <string name="no_internet_mode">You are in digital hermit mode. No internet.</string>
-  <string name="close">close</string>
+  <string name="close">Close</string>
 
   <!-- Search Incident -->
   <string name="search_incident_query">Incident number or user document</string>
   <string name="search_incident">Search</string>
 
+  <!-- Languages -->
   <string name="en">English</string>
   <string name="es">Spanish</string>
-  <string name="required_not_empty">El campo no puede estar vacío</string>
-  <string name="max_char_limit">El campo debe tener minimo 1$s caracteres</string>
+  <string name="fr">French</string>
+  <string name="ar">Arabic</string>
 
-
+  <!-- Common Messages -->
+  <string name="required_not_empty">The field cannot be empty</string>
+  <string name="max_char_limit">The field must have at least %1$s characters</string>
+  <string name="how_would_you_rate_this_chat">How would you rate this chat?</string>
+  <string name="escribe_un_mensaje">Write a message...</string>
+  <string name="hablar_con_un_agente">Talk to an agent</string>
+  <string name="hola_presiona_el_boton_de_comenzar_si_estas_de_acuerdo_con_nuestra_politica_de_manejo_de_datos">Hello! Press the "Start" button if you agree with our data handling policy.</string>
+  <string name="comenzar">Start</string>
 </resources>

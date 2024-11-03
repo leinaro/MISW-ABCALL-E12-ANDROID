@@ -1,7 +1,6 @@
 package com.misw.abcall.data
 
 import com.misw.abcall.MainDispatcherRule
-import com.misw.abcall.data.api.ABCallApi
 import com.misw.abcall.data.api.RemoteDataSource
 import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
@@ -13,11 +12,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 class ABCallRepositoryImplTest {
 

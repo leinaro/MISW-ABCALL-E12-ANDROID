@@ -1,9 +1,9 @@
 package com.misw.abcall.ui
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -13,14 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,11 +40,14 @@ import com.misw.abcall.ui.theme.ABCallTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val viewModel: ABCallViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+         //   Language.configureLocaleOnStartForDevicesLowerThanTiramisu(this)
+
         super.onCreate(savedInstanceState)
         setContent {
 
@@ -59,10 +61,11 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(true)
             }
 
+
             ABCallTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     MainScreen(
                         state = state,
@@ -73,6 +76,7 @@ class MainActivity : ComponentActivity() {
                             viewModel.onUserIntent(userIntent)
                         },
                         getIncident = { viewModel.getIncident() },
+                        selectedLanguage = state.selectedLanguage,
                     )
                 }
             }
@@ -80,7 +84,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
@@ -90,11 +93,13 @@ fun MainScreen(
     isInternetAvailable: Boolean = true,
     launchIntent: (UserIntent) -> Unit = {},
     getIncident: () -> IncidentDTO?,
+    selectedLanguage: String? = null,
 ) {
     var offlineBannerVisible by rememberSaveable {
         mutableStateOf(false)
     }
-    Column(modifier = Modifier.fillMaxSize()) {
+
+    Column(modifier = Modifier.fillMaxSize().testTag("MainScreen")) {
         if (isInternetAvailable.not() && offlineBannerVisible) {
             OffLineBanner {
                 offlineBannerVisible = false
@@ -107,7 +112,8 @@ fun MainScreen(
                     showSplash = false
                 }
             )
-        } else {
+        }
+        else {
             MainScreenContent(
                 state = state,
                 event = event,

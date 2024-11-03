@@ -15,15 +15,13 @@ android {
         applicationId = "com.misw.abcall"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
-     //   resConfigs("en", "es")
-
     }
 
     buildTypes {
@@ -110,7 +108,10 @@ dependencies {
     implementation(libs.coil.compose)
 
     //
-    implementation ("androidx.appcompat:appcompat:1.7.0-alpha01")
+    implementation (libs.androidx.appcompat)
+
+    implementation (libs.androidx.datastore.preferences)
+
 
     testImplementation(libs.junit)
  //   testImplementation(libs.hilt.android.testing)
@@ -125,6 +126,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.androidx.uiautomator)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

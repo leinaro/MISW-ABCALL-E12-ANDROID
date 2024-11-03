@@ -1,6 +1,7 @@
 package com.misw.abcall.ui.common
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons.Filled
@@ -46,12 +47,26 @@ fun InfoDialog(
             }
 
             Text(
-                text = "Tears of the devs",
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.titleLarge,
+                text = "ABCall",
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.labelSmall,
+                text = "Version v2.0.0-02-11-2024",
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                text = "by Tears of the devs",
                 modifier = Modifier
 
                     .padding(horizontal = 16.dp)
                     .align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
 
                 )
@@ -64,7 +79,6 @@ fun InfoDialog(
                 textAlign = TextAlign.Center,
 
                 )
-
         }
     }
 }

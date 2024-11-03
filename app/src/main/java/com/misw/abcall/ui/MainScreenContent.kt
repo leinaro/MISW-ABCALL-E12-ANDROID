@@ -1,6 +1,5 @@
 package com.misw.abcall.ui
 
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,11 +23,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,9 +36,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.misw.abcall.R
 import com.misw.abcall.domain.IncidentDTO
+import com.misw.abcall.ui.chat.ActivateChatScreen
+import com.misw.abcall.ui.chat.ChatScreen
 import com.misw.abcall.ui.common.ABCallTopAppBar
 import com.misw.abcall.ui.common.InfoDialog
-import com.misw.abcall.ui.common.LocaleDropdownMenu
+import com.misw.abcall.ui.search.SearchIncidentScreenContent
 import com.misw.abcall.ui.state.ABCallEvent
 import com.misw.abcall.ui.state.ABCallEvent.Idle
 import com.misw.abcall.ui.state.ABCallEvent.NavigateBack
@@ -49,27 +50,20 @@ import com.misw.abcall.ui.state.ABCallEvent.ShowSuccess
 import com.misw.abcall.ui.state.MainViewState
 import com.misw.abcall.ui.theme.ABCallTheme
 import com.misw.abcall.ui.user.IncidentDetailsScreen
-import com.misw.abcall.ui.search.SearchIncidentScreenContent
 import com.misw.abcall.ui.user.UserDetailsScreen
 import com.misw.abcall.ui.user.UserIncidentListScreen
 import kotlinx.coroutines.launch
 
-//@OptIn(ExperimentalMaterialApi::class)
 @Composable fun MainScreenContent(
     state: MainViewState,
     event: ABCallEvent = Idle,
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     launchIntent: (UserIntent) -> Unit = {},
-    getIncident: () -> IncidentDTO?,
+    getIncident: () -> IncidentDTO?
 ) {
-    val context = LocalContext.current
 
     val navController = rememberNavController()
-
-/*    fun navigateTo(route: String) {
-        navController.navigate(route)
-    }*/
 
     var selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf("albums", "artists", "collectors")
@@ -77,12 +71,6 @@ import kotlinx.coroutines.launch
     val scope = rememberCoroutineScope()
     var isInfoDialogVisible by remember { mutableStateOf(false) }
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
-
-    /*
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = isRefreshing,
-        onRefresh = onRefresh
-    )*/
 
     fun showSnackBar(message: String) {
         try {
@@ -123,7 +111,11 @@ import kotlinx.coroutines.launch
             }
 
             is NavigateTo -> {
-                navController.navigate(event.route)
+                navController.navigate(event.route) {
+                    if (event.route == Routes.Chat.path){
+                        popUpTo(Routes.ActivateChat.path) { inclusive = true }
+                    }
+                }
             }
 
             is Idle -> Unit
@@ -131,20 +123,21 @@ import kotlinx.coroutines.launch
     }
 
     Scaffold(
+        modifier = Modifier.testTag("MainScreenContent"),
         floatingActionButton = {
             when (currentBackStackEntry?.destination?.route){
-                "chat" -> {}
-                else -> {
+                Routes.SearchIncident.path -> {
                     ExtendedFloatingActionButton(
-                        onClick = { /*TODO*/ },
+                        modifier = Modifier.testTag("StartChatBotButton"),
+                        onClick = { launchIntent(UserIntent.OpenActivateChat) },
                         containerColor = Color(0xFFEADDFF),
                         contentColor = Color(0xFF21005D),
                     ) {
                         Icon(painter = painterResource(id = R.drawable.ic_support_agent), contentDescription = null)
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text("Hablar con un agente")
+                        Text(stringResource(R.string.hablar_con_un_agente))
                     }
-                }
+                } else -> {}
             }
         },
         topBar = {
@@ -155,9 +148,10 @@ import kotlinx.coroutines.launch
                 }
             )
         },
-        /* snackbarHost = {
+         snackbarHost = {
+             SnackbarHost(hostState = snackbarHostState)
          },
-         bottomBar = {
+/*         bottomBar = {
              ABCallNavigationBar(
                  onItemSelected = { selected ->
                      selectedItem = selected
@@ -172,12 +166,6 @@ import kotlinx.coroutines.launch
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            LocaleDropdownMenu(
-                onLocaleSelected = { locale ->
-                    val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(locale)
-                    AppCompatDelegate.setApplicationLocales(appLocale)
-                }
-            )
             NavHost(
                 navController = navController,
                 startDestination = Routes.SearchIncident.path,
@@ -187,6 +175,15 @@ import kotlinx.coroutines.launch
             ) {
                 composable(Routes.SearchIncident.path) {
                     SearchIncidentScreenContent(
+                        modifier = Modifier.testTag("SearchIncidentScreenContent"),
+                        launchIntent = launchIntent,
+                    )
+                }
+                composable(Routes.Language.path) {
+                    LanguageSelectionComponent(
+                        modifier = Modifier.testTag("LanguageSelectionComponent"),
+                        selectedLanguage = state.selectedLanguage,
+                        navController = navController,
                         launchIntent = launchIntent,
                     )
                 }
@@ -214,13 +211,25 @@ import kotlinx.coroutines.launch
                     val userId = backStackEntry.arguments?.getInt("userId")
                     UserDetailsScreen(userId = userId, navController = navController)
                 }
+                composable(
+                    route = Routes.ActivateChat.path,
+                ) {
+                    ActivateChatScreen(
+                        modifier = Modifier.testTag("ActivateChatScreen"),
+                        launchIntent = launchIntent,
+                    )
+                }
+                composable(
+                    route = Routes.Chat.path,
+                ) {
+                    ChatScreen(
+                        modifier = Modifier.testTag("ChatScreen"),
+                        launchIntent = launchIntent,
+                        list = state.messageList,
+                        isTyping = state.isTyping,
+                    )
+                }
             }
-            /*
-                        PullRefreshIndicator(
-                            modifier = Modifier.align(Alignment.TopCenter),
-                            refreshing = isRefreshing,
-                            state = pullRefreshState,
-                        )*/
 
             SnackbarHost(snackbarHostState) { data ->
                 Snackbar {
