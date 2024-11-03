@@ -9,15 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DatePicker
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +26,7 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.misw.abcall.R
@@ -42,7 +40,9 @@ fun ActivateChatScreen(
     launchIntent: (UserIntent) ->Unit = {},
 ) {
     Box(
-        modifier = modifier.fillMaxSize().padding(top = 60.dp)
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = 60.dp)
     ) {
         Card(
             shape = RoundedCornerShape(16.dp),
@@ -57,7 +57,10 @@ fun ActivateChatScreen(
             Text(
                 modifier = Modifier.padding(28.dp),
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                text = "Hola! Presiona el boton de \"Comenzar\" si estas de acuerdo con nuestra politica de manejo de datos.")
+                text = stringResource(
+                    R.string.hola_presiona_el_boton_de_comenzar_si_estas_de_acuerdo_con_nuestra_politica_de_manejo_de_datos
+                )
+            )
 
             Button(
                 shape = RectangleShape,
@@ -65,14 +68,15 @@ fun ActivateChatScreen(
                     containerColor = Color(0xFFEADDFF),
                     contentColor = Black
                 ),
-                modifier = Modifier.align(CenterHorizontally)
+                modifier = Modifier
+                    .align(CenterHorizontally)
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 22.dp),
                 onClick = {
                     launchIntent(UserIntent.ActivateChat)
                 }
             ) {
-                Text("Comenzar")
+                Text(stringResource(R.string.comenzar))
             }
 
         }

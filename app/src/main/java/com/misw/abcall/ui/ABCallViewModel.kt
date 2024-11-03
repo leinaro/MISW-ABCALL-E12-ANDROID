@@ -6,9 +6,9 @@ import com.misw.abcall.data.api.ChatMessageDTO
 import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.Routes.IncidentDetails
-import com.misw.abcall.ui.chat.ChatMessage
 import com.misw.abcall.ui.UserIntent.SearchIncident
 import com.misw.abcall.ui.UserIntent.UpdateLanguage
+import com.misw.abcall.ui.chat.ChatMessage
 import com.misw.abcall.ui.state.ABCallEvent
 import com.misw.abcall.ui.state.ABCallEvent.NavigateTo
 import com.misw.abcall.ui.state.MainViewState
@@ -17,9 +17,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex

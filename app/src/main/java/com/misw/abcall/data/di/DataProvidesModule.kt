@@ -3,7 +3,6 @@ package com.misw.abcall.data.di
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import com.misw.abcall.data.api.ABCallApi
-import dagger.Component.Factory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

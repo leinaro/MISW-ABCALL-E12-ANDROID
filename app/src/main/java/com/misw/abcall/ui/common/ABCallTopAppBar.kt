@@ -5,7 +5,6 @@ import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.Icons.Outlined
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,6 +15,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,20 +55,19 @@ fun ABCallTopAppBar(
             }
         },
         actions = {
+            IconButton(onClick = {
+                navController.navigate(Routes.Language.path)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_language),
+                    contentDescription = "Language",
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
             IconButton(onClick = { onInfoActionClick() }) {
                 Icon(
                     imageVector = Outlined.Info,
                     contentDescription = "Info",
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
-            IconButton(onClick = {
-//                navController.navigateUp()
-                navController.navigate(Routes.Language.path)
-            }) {
-                Icon(
-                    imageVector = Outlined.MoreVert,
-                    contentDescription = "More",
                     tint = MaterialTheme.colorScheme.primary,
                 )
             }

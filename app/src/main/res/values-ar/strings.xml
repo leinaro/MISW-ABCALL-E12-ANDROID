@@ -1,0 +1,26 @@
+<resources>
+  <string name="app_name" translatable="false">ABCall</string>
+
+  <!-- No Internet Banner -->
+  <string name="no_internet_mode">أنت في وضع الناسك الرقمي. لا يوجد إنترنت.</string>
+  <string name="close">إغلاق</string>
+
+  <!-- Search Incident -->
+  <string name="search_incident_query">رقم الحادث أو وثيقة المستخدم</string>
+  <string name="search_incident">بحث</string>
+
+  <!-- Languages -->
+  <string name="en">الإنجليزية</string>
+  <string name="es">الإسبانية</string>
+  <string name="fr">الفرنسية</string>
+  <string name="ar">العربية</string>
+
+  <!-- Common Messages -->
+  <string name="required_not_empty">لا يمكن أن يكون الحقل فارغًا</string>
+  <string name="max_char_limit">يجب أن يحتوي الحقل على %1$s حرفًا على الأقل</string>
+  <string name="how_would_you_rate_this_chat">كيف تقيم هذا الدردشة؟</string>
+  <string name="escribe_un_mensaje">اكتب رسالة...</string>
+  <string name="hablar_con_un_agente">التحدث إلى وكيل</string>
+  <string name="hola_presiona_el_boton_de_comenzar_si_estas_de_acuerdo_con_nuestra_politica_de_manejo_de_datos">مرحبًا! اضغط على زر "ابدأ" إذا كنت توافق على سياسة التعامل مع بياناتنا.</string>
+  <string name="comenzar">ابدأ</string>
+</resources>
