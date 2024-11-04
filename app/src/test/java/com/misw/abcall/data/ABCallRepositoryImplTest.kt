@@ -1,6 +1,7 @@
 package com.misw.abcall.data
 
 import com.misw.abcall.MainDispatcherRule
+import com.misw.abcall.data.api.LocalDataSource
 import com.misw.abcall.data.api.RemoteDataSource
 import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
@@ -25,6 +26,8 @@ class ABCallRepositoryImplTest {
 
     private val remoteDataSource: RemoteDataSource  = mockk()
     private val networkConnectivityService: NetworkConnectivityService = mockk()
+    private val localDataSource: LocalDataSource = mockk()
+
     private lateinit var subject: ABCallRepository
 
     @Before
@@ -34,6 +37,7 @@ class ABCallRepositoryImplTest {
 
         subject = ABCallRepositoryImpl(
             remoteDataSource,
+            localDataSource = localDataSource,
             networkConnectivityService
         )
     }
