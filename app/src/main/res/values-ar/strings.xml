@@ -23,4 +23,13 @@
   <string name="hablar_con_un_agente">التحدث إلى وكيل</string>
   <string name="hola_presiona_el_boton_de_comenzar_si_estas_de_acuerdo_con_nuestra_politica_de_manejo_de_datos">مرحبًا! اضغط على زر "ابدأ" إذا كنت توافق على سياسة التعامل مع بياناتنا.</string>
   <string name="comenzar">ابدأ</string>
+  <string name="datos_del_incidente">بيانات الحادث</string>
+  <string name="id">المعرف</string>
+  <string name="titular">صاحب</string>
+  <string name="descripcion">الوصف</string>
+  <string name="tipo">النوع</string>
+  <string name="estado">الحالة</string>
+  <string name="creaci_n">التأسيس</string>
+  <string name="ultima_actualizaci_n">آخر تحديث</string>
+
 </resources>

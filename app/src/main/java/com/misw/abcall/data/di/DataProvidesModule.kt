@@ -16,6 +16,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 private const val BASE_URL = "http://10.0.2.2:5008/"
+//private const val BASE_URL = "http://34.8.156.167/"
 //private const val BASE_URL = "https://api-gateway-649096178068.us-central1.run.app/"
 
 @Module

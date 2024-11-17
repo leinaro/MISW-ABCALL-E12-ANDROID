@@ -23,4 +23,13 @@
   <string name="hablar_con_un_agente">Talk to an agent</string>
   <string name="hola_presiona_el_boton_de_comenzar_si_estas_de_acuerdo_con_nuestra_politica_de_manejo_de_datos">Hello! Press the "Start" button if you agree with our data handling policy.</string>
   <string name="comenzar">Start</string>
+  <string name="datos_del_incidente">Incident Data</string>
+  <string name="id">ID</string>
+  <string name="titular">Holder</string>
+  <string name="descripcion">Description</string>
+  <string name="tipo">Type</string>
+  <string name="estado">Status</string>
+  <string name="creaci_n">Creation</string>
+  <string name="ultima_actualizaci_n">Last Update</string>
+
 </resources>

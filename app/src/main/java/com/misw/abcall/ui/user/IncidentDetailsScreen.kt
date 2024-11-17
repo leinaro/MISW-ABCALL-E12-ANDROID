@@ -15,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.misw.abcall.R
 import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.ui.theme.ABCallTheme
 
@@ -31,19 +33,21 @@ fun IncidentDetailsScreen(incidentId: Int? = null, incident: IncidentDTO?) {
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(
-            text = "Datos del incidente",
+            text = stringResource(R.string.datos_del_incidente),
             style = MaterialTheme.typography.titleLarge,
         )
 
-        DataBox("Id", incident?.id.orEmpty())
-        DataBox("Titulo", incident?.description.orEmpty())
-        DataBox("descripcion", incident?.description.orEmpty())
-        DataBox("Tipo", incident?.registration_medium.orEmpty())
-        DataBox("Estado", incident?.status.orEmpty())
-        DataBox("Creación", incident?.date.orEmpty())
-        DataBox("Ultima Actualización", incident?.date.orEmpty())
+        DataBox(stringResource(R.string.id), incident?.id.orEmpty())
+        DataBox(stringResource(R.string.titular), incident?.description.orEmpty())
+        DataBox(stringResource(R.string.descripcion), incident?.description.orEmpty())
+        DataBox(stringResource(R.string.tipo), incident?.registration_medium.orEmpty())
+        DataBox(stringResource(R.string.estado), incident?.status.orEmpty())
+        DataBox(stringResource(R.string.creaci_n), incident?.date.orEmpty())
+        DataBox(stringResource(R.string.ultima_actualizaci_n), incident?.date.orEmpty())
 
-        Spacer(modifier = Modifier.fillMaxWidth().height(70.dp))
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(70.dp))
 
     }
 }
@@ -51,7 +55,8 @@ fun IncidentDetailsScreen(incidentId: Int? = null, incident: IncidentDTO?) {
 @Composable
 private fun DataBox(title: String, description: String){
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .background(Color(0xFFFEF7FF))
             .padding(horizontal = 16.dp, vertical = 14.dp),
     ) {
