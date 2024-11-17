@@ -1,6 +1,7 @@
 package com.misw.abcall.data
 
 import com.misw.abcall.MainDispatcherRule
+import com.misw.abcall.data.api.LocalDataSource
 import com.misw.abcall.data.api.RemoteDataSource
 import com.misw.abcall.domain.ABCallRepository
 import com.misw.abcall.domain.IncidentDTO
@@ -15,6 +16,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.net.ConnectException
+import java.net.SocketException
 
 class ABCallRepositoryImplTest {
 
@@ -25,6 +28,7 @@ class ABCallRepositoryImplTest {
 
     private val remoteDataSource: RemoteDataSource  = mockk()
     private val networkConnectivityService: NetworkConnectivityService = mockk()
+    private val localDataSource: LocalDataSource = mockk()
     private lateinit var subject: ABCallRepository
 
     @Before
@@ -33,8 +37,9 @@ class ABCallRepositoryImplTest {
         coEvery { networkConnectivityService.networkStatus } returns flowOf(NetworkStatus.Connected)
 
         subject = ABCallRepositoryImpl(
-            remoteDataSource,
-            networkConnectivityService
+            remoteDataSource = remoteDataSource,
+            localDataSource = localDataSource,
+            networkConnectivityService = networkConnectivityService,
         )
     }
 
@@ -52,20 +57,52 @@ class ABCallRepositoryImplTest {
         coVerify(exactly = 1) { remoteDataSource.searchIncident(query) }
         assert(result == incident)
     }
-    /*@Test
-    fun searchIncidentError()= runTest {
+
+    @Test(expected = UIError.UnknownError::class)
+    fun searchIncidentErrorUnknownError()= runTest {
         // Given
         val query = "1"
-        val incident = mockk<IncidentDTO>()
-        coEvery { remoteDataSource.searchIncident(query) } throws Exception("Test")
+        coEvery { remoteDataSource.searchIncident(query) }.throws(Exception("Test"))
+
 
         // When
-        val result = subject.getIncident(query).last()
+        subject.getIncident(query).last()
+
 
         // Then
         coVerify(exactly = 1) { remoteDataSource.searchIncident(query) }
-       // assert(result == incident)
-    }*/
+    }
+
+    @Test(expected = UIError.NetworkError::class)
+    fun searchIncidentErrorNetworkError()= runTest {
+        // Given
+        val query = "1"
+        coEvery { remoteDataSource.searchIncident(query) }.throws(ConnectException("Test"))
+
+
+        // When
+        subject.getIncident(query).last()
+
+
+        // Then
+        coVerify(exactly = 1) { remoteDataSource.searchIncident(query) }
+    }
+
+    @Test(expected = UIError.ServerError::class)
+    fun searchIncidentErrorServerError()= runTest {
+        // Given
+        val query = "1"
+        coEvery { remoteDataSource.searchIncident(query) }.throws(SocketException("Test"))
+
+        // When
+        subject.getIncident(query).last()
+
+
+        // Then
+        coVerify(exactly = 1) { remoteDataSource.searchIncident(query) }
+    }
+
+
 
     @Test
     fun getUserIncidents()= runTest {
