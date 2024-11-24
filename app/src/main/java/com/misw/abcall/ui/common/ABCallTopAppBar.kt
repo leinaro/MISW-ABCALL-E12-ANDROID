@@ -48,7 +48,7 @@ fun ABCallTopAppBar(
         },
         navigationIcon = {
             if (currentBackStackEntry?.destination?.route !in baseRoute) {
-                IconButton(onClick = { navController.navigateUp() }) {
+                IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = Filled.ArrowBack,
                         contentDescription = "Back"

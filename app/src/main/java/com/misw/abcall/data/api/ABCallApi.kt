@@ -14,7 +14,7 @@ interface ABCallApi {
     suspend fun getIncidentByUser(@Path("id") id: String?): List<IncidentDTO>
     @GET("/user/{id}")
     suspend fun getUser(@Path("id") id: String?): UserDTO
-    @POST("/chatbot")
+    @POST("/unified-chatbot")
     suspend fun chat(@Body message: ChatMessageDTO): ChatMessageResponseDTO
 }
 
