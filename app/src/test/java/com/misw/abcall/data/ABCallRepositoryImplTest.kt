@@ -1,5 +1,7 @@
 package com.misw.abcall.data
 
+import com.google.android.gms.tasks.Task
+import com.google.firebase.messaging.FirebaseMessaging
 import com.misw.abcall.MainDispatcherRule
 import com.misw.abcall.data.api.LocalDataSource
 import com.misw.abcall.data.api.RemoteDataSource
@@ -8,7 +10,10 @@ import com.misw.abcall.domain.IncidentDTO
 import com.misw.abcall.domain.UserDTO
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.last
@@ -29,17 +34,22 @@ class ABCallRepositoryImplTest {
     private val remoteDataSource: RemoteDataSource  = mockk()
     private val networkConnectivityService: NetworkConnectivityService = mockk()
     private val localDataSource: LocalDataSource = mockk()
+    private val firebaseMessaging: FirebaseMessaging = mockk(relaxed = true)
     private lateinit var subject: ABCallRepository
 
     @Before
     fun setUp() {
         coEvery { networkConnectivityService.networkConnection() } returns true
         coEvery { networkConnectivityService.networkStatus } returns flowOf(NetworkStatus.Connected)
+        val task = mockk<Task<Void>>(relaxed = true)
+        coEvery { firebaseMessaging.subscribeToTopic(any()) } returns task
+        //coEvery { task.addOnCompleteListener(any()) } just runs
 
         subject = ABCallRepositoryImpl(
             remoteDataSource = remoteDataSource,
             localDataSource = localDataSource,
             networkConnectivityService = networkConnectivityService,
+            firebaseMessaging = firebaseMessaging
         )
     }
 
@@ -47,7 +57,7 @@ class ABCallRepositoryImplTest {
     fun searchIncident()= runTest {
         // Given
         val query = "1"
-        val incident = mockk<IncidentDTO>()
+        val incident = mockk<IncidentDTO>(relaxed = true)
         coEvery { remoteDataSource.searchIncident(query) } returns incident
 
         // When

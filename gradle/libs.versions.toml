@@ -27,6 +27,8 @@ rules = "1.6.1"
 runner = "1.6.2"
 screenshot = "0.0.1-alpha01"
 uiautomator = "2.3.0"
+googleGmsGoogleServices = "4.4.2"
+firebaseInappmessagingDisplay = "21.0.1"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -63,12 +65,14 @@ logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", ver
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+firebase-inappmessaging-display = { group = "com.google.firebase", name = "firebase-inappmessaging-display", version.ref = "firebaseInappmessagingDisplay" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref ="hiltVersion" }
 screenshot = { id = "com.android.compose.screenshot", version.ref = "screenshot"}
+googleGmsGoogleServices = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
 
 
