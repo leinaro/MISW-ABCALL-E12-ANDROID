@@ -7,6 +7,7 @@ plugins {
     id("com.google.devtools.ksp")
     alias(libs.plugins.screenshot)
     id("jacoco")
+    alias(libs.plugins.googleGmsGoogleServices)
 }
 
 val exclusions = listOf(
@@ -25,8 +26,8 @@ android {
         applicationId = "com.misw.abcall"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
-        versionName = "2.0"
+        versionCode = 3
+        versionName = "3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -147,6 +148,10 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+    implementation("com.google.firebase:firebase-inappmessaging-display")
+    implementation("com.google.firebase:firebase-analytics")
+
     // Compose Navigation
     implementation(libs.androidx.navigation.compose)
 
@@ -195,6 +200,19 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Required when asking for permission to post notifications (starting in Android 13)
+   // implementation("androidx.activity:activity-ktx:1.9.3")
+   // implementation("androidx.fragment:fragment-ktx:1.8.5")
+
+    // Firebase Cloud Messaging
+    implementation("com.google.firebase:firebase-messaging")
+
+    implementation("com.google.firebase:firebase-installations:18.0.0")
+
+    implementation("androidx.work:work-runtime:2.9.1")
+
+
 }
 
 // Allow references to generated code

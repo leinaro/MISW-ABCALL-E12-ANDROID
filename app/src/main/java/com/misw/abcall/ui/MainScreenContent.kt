@@ -45,6 +45,7 @@ import com.misw.abcall.ui.state.ABCallEvent
 import com.misw.abcall.ui.state.ABCallEvent.Idle
 import com.misw.abcall.ui.state.ABCallEvent.NavigateBack
 import com.misw.abcall.ui.state.ABCallEvent.NavigateTo
+import com.misw.abcall.ui.state.ABCallEvent.NotificationReceived
 import com.misw.abcall.ui.state.ABCallEvent.ShowError
 import com.misw.abcall.ui.state.ABCallEvent.ShowSuccess
 import com.misw.abcall.ui.state.MainViewState
@@ -57,16 +58,10 @@ import kotlinx.coroutines.launch
 @Composable fun MainScreenContent(
     state: MainViewState,
     event: ABCallEvent = Idle,
-    isRefreshing: Boolean = false,
-    onRefresh: () -> Unit = {},
     launchIntent: (UserIntent) -> Unit = {},
-    getIncident: () -> IncidentDTO?
+    getIncident: () -> IncidentDTO?,
 ) {
-
     val navController = rememberNavController()
-
-    var selectedItem by remember { mutableIntStateOf(0) }
-    val items = listOf("albums", "artists", "collectors")
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var isInfoDialogVisible by remember { mutableStateOf(false) }
@@ -99,7 +94,7 @@ import kotlinx.coroutines.launch
     LaunchedEffect(key1 = event) {
         when (event) {
             is NavigateBack -> {
-                navController.navigateUp()
+                navController.popBackStack()
             }
 
             is ShowError -> {
@@ -116,6 +111,9 @@ import kotlinx.coroutines.launch
                         popUpTo(Routes.ActivateChat.path) { inclusive = true }
                     }
                 }
+            }
+
+            is NotificationReceived -> {
             }
 
             is Idle -> Unit

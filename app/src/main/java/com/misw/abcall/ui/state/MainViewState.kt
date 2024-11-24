@@ -15,4 +15,5 @@ sealed class ABCallEvent{
     data class ShowError(val message: String): ABCallEvent()
     data class ShowSuccess(val message: String): ABCallEvent()
     object Idle: ABCallEvent()
+    data class NotificationReceived(val incidentId: String): ABCallEvent()
 }

@@ -112,4 +112,5 @@ data class ChatMessage(
     val message: String = "Hola! Soy un agente virtual, en que puedo ayudarte?",
     val isAgent: Boolean = true,
     val time: String = "Livechat ${Date().toLocaleString()}",
+    val language: String = "en"
 )

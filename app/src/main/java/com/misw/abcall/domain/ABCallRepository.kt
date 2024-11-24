@@ -1,6 +1,7 @@
 package com.misw.abcall.domain
 
 import com.misw.abcall.data.api.ChatMessageDTO
+import com.misw.abcall.data.api.ChatMessageResponseDTO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -8,7 +9,7 @@ interface ABCallRepository {
     fun getIncident(query: String): Flow<IncidentDTO>
     fun getUserIncidents(query: String): Flow<List<IncidentDTO>>
     fun getUser(query: String): Flow<UserDTO>
-    fun start(): Flow<String>
+    fun start(): Flow<ChatMessageResponseDTO>
     fun chat(message: ChatMessageDTO): Flow<String>
     fun getSelectedLanguage(): Flow<String?>
     suspend fun updateSelectedLanguage(code: String)
