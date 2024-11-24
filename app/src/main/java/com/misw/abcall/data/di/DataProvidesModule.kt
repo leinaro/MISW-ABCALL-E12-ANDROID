@@ -2,6 +2,7 @@ package com.misw.abcall.data.di
 
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import com.google.firebase.messaging.FirebaseMessaging
 import com.misw.abcall.data.api.ABCallApi
 import dagger.Module
 import dagger.Provides
@@ -48,5 +49,8 @@ object DataProvidesModule {
         .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
         .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
         .build()
+
+    @Provides
+    fun providesFirebaseMessaging() = FirebaseMessaging.getInstance()
 }
 

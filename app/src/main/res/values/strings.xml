@@ -31,5 +31,6 @@
   <string name="estado">Status</string>
   <string name="creaci_n">Creation</string>
   <string name="ultima_actualizaci_n">Last Update</string>
+  <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
 </resources>

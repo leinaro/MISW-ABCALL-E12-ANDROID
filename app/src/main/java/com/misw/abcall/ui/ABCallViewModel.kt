@@ -10,7 +10,9 @@ import com.misw.abcall.ui.UserIntent.SearchIncident
 import com.misw.abcall.ui.UserIntent.UpdateLanguage
 import com.misw.abcall.ui.chat.ChatMessage
 import com.misw.abcall.ui.state.ABCallEvent
+import com.misw.abcall.ui.state.ABCallEvent.Idle
 import com.misw.abcall.ui.state.ABCallEvent.NavigateTo
+import com.misw.abcall.ui.state.ABCallEvent.NotificationReceived
 import com.misw.abcall.ui.state.MainViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -53,11 +55,11 @@ class ABCallViewModel @Inject constructor(
                     )
                 }
                 .collect {
-                    chatUUID = it
+                    chatUUID = it.chatbot_conversation_id
                     _state.update { state ->
                         state.copy(
                             isTyping = false,
-                            messageList = state.messageList + ChatMessage()
+                            messageList = state.messageList + ChatMessage(message = it.msg.orEmpty(), language = state.selectedLanguage ?: "en")
                         )
                     }
                     setEvent(NavigateTo(Routes.Chat.path))
@@ -178,8 +180,8 @@ class ABCallViewModel @Inject constructor(
     private fun setEvent(event: ABCallEvent) {
         viewModelScope.launch {
             _event.value = event
-            //delay(200)
-            //_event.value = Idle
+            delay(200)
+            _event.value = Idle
         }
     }
 
@@ -202,6 +204,11 @@ class ABCallViewModel @Inject constructor(
             }
 
             is UserIntent.SendMessage -> {
+                if (userIntent.message.contains("start", true)) {
+                    startChat()
+                    return
+                }
+
                 _state.update { state ->
                     state.copy(
                         isTyping = true,
@@ -233,7 +240,7 @@ class ABCallViewModel @Inject constructor(
                      viewModelScope.launch {
                          chat(userIntent.message)
                      }
-                 }*/
+                 }
                 else if (userIntent.message.contains("hola", true)) {
                     viewModelScope.launch {
                         _state.update { state ->
@@ -246,7 +253,7 @@ class ABCallViewModel @Inject constructor(
                             )
                         }
                     }
-                } else {
+                }*/ else {
                     viewModelScope.launch {
                         chat(userIntent.message)
                     }
@@ -268,6 +275,10 @@ class ABCallViewModel @Inject constructor(
             is UpdateLanguage -> {
                 updateSelectedLanguage(userIntent.code)
             }
+
+            is UserIntent.OnNewIntent -> {
+                setEvent(NotificationReceived(incidentId = userIntent.incidentId))
+            }
         }
     }
 
@@ -280,6 +291,7 @@ sealed class UserIntent {
     object OpenActivateChat : UserIntent()
     data class SendMessage(val message: String) : UserIntent()
     data class UpdateLanguage(val code: String) : UserIntent()
+    data class OnNewIntent(val incidentId: String) : UserIntent()
 }
 
 fun isUUID(input: String): Boolean {

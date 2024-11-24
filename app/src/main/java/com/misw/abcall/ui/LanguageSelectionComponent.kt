@@ -56,7 +56,7 @@ fun LanguageSelectionComponent(
                             .padding(horizontal = 30.dp),
                         onClick = {
                             currentLocale = language
-                            navController.navigateUp()
+                            navController.popBackStack()
                             //launchIntent.invoke(UserIntent.UpdateLanguage(language.code))
                             //Language.setLocale(context = context, localeCode = language.code)
                         },
@@ -72,7 +72,6 @@ fun LanguageSelectionComponent(
                             currentLocale = language
                             launchIntent.invoke(UserIntent.UpdateLanguage(language.code))
                             Language.setLocale(context = context, localeCode = language.code)
-                            navController.navigateUp()
                         },
                         content = {
                             Text(text = stringResource(id = language.titleRes))

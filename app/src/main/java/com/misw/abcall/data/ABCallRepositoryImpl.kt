@@ -1,6 +1,11 @@
 package com.misw.abcall.data
 
+import android.R
+import android.util.Log
+import android.widget.Toast
+import com.google.firebase.messaging.FirebaseMessaging
 import com.misw.abcall.data.api.ChatMessageDTO
+import com.misw.abcall.data.api.ChatMessageResponseDTO
 import com.misw.abcall.data.api.LocalDataSource
 import com.misw.abcall.data.api.RemoteDataSource
 import com.misw.abcall.domain.ABCallRepository
@@ -22,6 +27,7 @@ class ABCallRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val networkConnectivityService: NetworkConnectivityService,
+    private val firebaseMessaging: FirebaseMessaging,
 ): ABCallRepository {
     private val _isRefreshing = MutableStateFlow(false)
     override val isRefreshing: StateFlow<Boolean> = _isRefreshing
@@ -44,12 +50,25 @@ class ABCallRepositoryImpl @Inject constructor(
         }
     }
 
+    private fun subscribe(id: String) {
+        firebaseMessaging.subscribeToTopic(id)
+            .addOnCompleteListener { task ->
+               // var msg: String? = getString(R.string.msg_subscribed)
+                if (!task.isSuccessful) {
+                 //  msg = getString(R.string.msg_subscribe_failed)
+                }
+                //Log.d(TAG, msg!!)
+                //Toast.makeText(this@MainActivity, msg, Toast.LENGTH_SHORT).show()
+            }
+    }
+
     override fun getIncident(query: String): Flow<IncidentDTO> {
         return flow {
             try {
                 _isRefreshing.value = true
                 val incident = remoteDataSource.searchIncident(query)
                 emit(incident)
+                incident.id?.let { subscribe(it) }
                 _isRefreshing.value = false
             } catch (e: Exception) {
                 _isRefreshing.value = false
@@ -72,7 +91,7 @@ class ABCallRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun start(): Flow<String> {
+    override fun start(): Flow<ChatMessageResponseDTO> {
         return flow {
             try {
                 _isRefreshing.value = true
@@ -96,6 +115,7 @@ class ABCallRepositoryImpl @Inject constructor(
                 }?: run {
                     response.id?.let {
                         emit("He creado el incidente con el id $it y se encuentra en estado ${response.status}" )
+                        subscribe(it)
                     }
                 }
                 _isRefreshing.value = false
